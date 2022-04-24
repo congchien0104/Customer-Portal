@@ -30,10 +30,14 @@ import ForgetPassword from "./components/Forget/ForgetPassword";
 import NewPassword from "./components/Forget/NewPassword";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import SignIn from "./components/SignIn/SignIn";
+import SignUp from "./components/SignUp/SignUp";
 
 function App() {
   return (
     <div className="App">
+      {/* <SignIn />
+      <SignUp /> */}
       <Header />
 
       <Switch>
@@ -73,28 +77,10 @@ function App() {
         draggable
         pauseOnHover
       />
-      {/* Same as */}
-      <ToastContainer />
+      {/* Same as
+      <ToastContainer /> */}
     </div>
   );
 }
-
-const showContentMenus = (routes) => {
-  var result = null;
-  if (routes.length > 0) {
-    result = routes.map((route, index) => {
-      return (
-        <Route
-          key={index}
-          path={route.path}
-          exact={route.exact}
-          component={route.main}
-        />
-      );
-    });
-  }
-
-  return <Switch>{result}</Switch>;
-};
 
 export default App;

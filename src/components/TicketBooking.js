@@ -36,7 +36,7 @@ function TicketBooking() {
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   // get functions to build form with useForm() hook
-  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
   const [car, setCar] = useState();
   const [amount, setAmout] = useState(0);
@@ -64,9 +64,6 @@ function TicketBooking() {
     .catch((e) => {
       console.log(e);
     });
-    // display form data on success
-    // alert('SUCCESS!! :-)\n\n' + JSON.stringify(data, null, 4));
-    // return false;
   }
 
 
@@ -158,26 +155,6 @@ function TicketBooking() {
                     <strong>{amount}</strong>
                   </li>
               }
-              
-              {/* <li class="list-group-item d-flex justify-content-between lh-condensed">
-                <div class="text-success">
-                  <label>Số Lượng Vé</label>
-                  <input name="quantity" type="number" {...register('quantity')} onChange={(e) => setAmout(e.target.value*car.price)} className={`form-control ${errors.quantity ? 'is-invalid' : ''}`} />
-                  <div className="invalid-feedback">{errors.quantity?.message}</div>
-                </div>
-                <span class="text-muted">{amount}</span>
-              </li> */}
-              {/* <li class="list-group-item d-flex justify-content-between lh-condensed">
-                <div class="text-success">
-                  <h6 class="my-0">Product 3</h6>
-                  <small class="text-muted">Brief description</small>
-                </div>
-                <span class="text-muted">$12</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span>Tổng giá (VND)</span>
-                <strong>1.000.000</strong>
-              </li> */}
             </ul>
           </div>
           <div class="col-md-8 order-md-1">
@@ -187,26 +164,17 @@ function TicketBooking() {
                 <div className="col-md-6"></div>
               </div>
               <div class="row">
-                <div class="plane">
-                  <div class="cockpit">
-                    <h1>Please select a seat</h1>
-                  </div>
-                  <div class="exit exit--front fuselage"></div>
-                  <ol class="cabin fuselage">
+                <div class="container">
+                    <div class="row row-cols-3">
                     {
-                      seats && seats.map((seat, index) => (
-                        <li class="row row--1">
-                          <ol class="seats" type="A">
-                            <li class="seat">
+                        seats && seats.map((seat, index) => (
+                            <div class="col">
                               <input type="checkbox" id={seat.id} name={seat.name} disabled={ flag.includes(seat.name) } onChange={(e)=> handleSeat(e)}/>
                               <label for={seat.id}>{seat.name}</label>
-                            </li>
-                          </ol>
-                        </li>
-                      ))
+                            </div>
+                        ))
                     }
-                  </ol>
-                  <div class="exit exit--back fuselage"></div>
+                  </div>
                 </div>
                 <div class="col-md-6 mb-3">
                   <label>Họ Tên</label>

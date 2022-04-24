@@ -24,8 +24,8 @@ function BookingHistory(props) {
     return (
         <section className="car-line">
       <div className="container">
-        <h1 className="heading-title">Danh sách Lịch Sử Đặt Vé: </h1>
-        {books.map((item, index) => (
+        <h1 className="heading-title bg-warning text-dark">Danh sách Lịch Sử Đặt Vé: </h1>
+        {/* {books.map((item, index) => (
           <div class="card mb-3">
             <div class="row no-gutters">
               <div class="col-md-4">
@@ -68,7 +68,23 @@ function BookingHistory(props) {
               </div>
             </div>
           </div>
-        ))}
+        ))} */}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+          {
+            books.map((item, index) => (
+              <div class="col">
+                <div class="card">
+                  <img src="..." class="card-img-top" alt="..."/>
+                  <div class="card-body">
+                    <h5 class="card-title">{item.cars.name}</h5>
+                    <p class="card-text">Tổng Tiền: {moneyFormatter(item.amount)}</p>
+                    <p class="card-text">Hành Trình: {item.cars.station} - {item.cars.station_to}</p>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
       </div>
     </section>
     );
@@ -84,6 +100,15 @@ const formatDate = (date) => {
   if (day.length < 2) day = "0" + day;
 
   return [year, month, day].join("-");
+};
+
+const moneyFormatter = (money) => {
+  if (!money) money = 0;
+  const result = new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+  }).format(money);
+  return result;
 };
 
 export default BookingHistory;

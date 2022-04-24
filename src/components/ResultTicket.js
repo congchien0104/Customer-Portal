@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { Link, useLocation, useHistory } from "react-router-dom";
-import queryString from "query-string";
+import { Link } from "react-router-dom";
 import carService from "../services/car.service";
 
 function ResultTicket() {
@@ -15,21 +14,14 @@ function ResultTicket() {
   const date = urlParams.get("date");
 
   const [cars, setCars] = useState([]);
-  // const [price, setPrice] = useState(100000);
-  // const result = (start, destination,date, price) => {
-  //   carService
-  //     .searchFilter(start, destination, date, price)
-  //     .then((response) => {
-  //       //console.log(response.data);
-  //       setCars(response.data.data.cars);
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
-  // };
-  const result = (start, destination,date) => {
+  const [order, setOrder] = useState(0);
+  //const [price, setPrice] = useState(100);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
+
+  const result = (start, destination,date, order) => {
     carService
-      .search(start, destination, date)
+      .search(start, destination, date, order)
       .then((response) => {
         console.log(response.data);
         setCars(response.data.data.cars);
@@ -40,8 +32,32 @@ function ResultTicket() {
   };
 
   useEffect(() => {
-    result(start, destination,date);
+    result(start, destination,date, order);
   }, []);
+
+  const handleOrder = (e) => {
+    console.log(e.target.value);
+    setOrder(e.target.value);
+  }
+
+  const handleChangeMinPrice = (e) => {
+    console.log(e.target.value);
+    setMinPrice(e.target.value);
+  };
+
+  const handleChangeMaxPrice = (e) => {
+    console.log(e.target.value);
+    setMaxPrice(e.target.value);
+  };
+
+  const moneyFormatter = (money) => {
+    if (!money) money = 0;
+    const result = new Intl.NumberFormat('it-IT', {
+        style: 'currency',
+        currency: 'VND',
+    }).format(money);
+    return result;
+  };
 
   return (
     <div className="result-ticket pt-5 pb-5">
@@ -57,12 +73,53 @@ function ResultTicket() {
               </div>
               <div class="list-group-item">
                 <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">Giá vé</h5>
+                  <div className="row">
+                  <div data-role="range">
+                      <label>
+                          Giá thấp nhất: {moneyFormatter(minPrice || 0)}
+                      </label>
+                      <input
+                          type="range"
+                          className="form-range"
+                          min="0"
+                          max="500000"
+                          step="1000"
+                          onChange={handleChangeMinPrice}
+                      />
+                  </div>
+                  <div data-role="range">
+                      <label>
+                          Giá cao nhất: {moneyFormatter(maxPrice || 0)}
+                      </label>
+                      <input
+                          type="range"
+                          className="form-range"
+                          min="0"
+                          max="2000000"
+                          step="1000"
+                          onChange={handleChangeMaxPrice}
+                      />
+                  </div>
+            </div>
                 </div>
               </div>
               <div class="list-group-item">
                 <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">Số ghế trống</h5>
+                  <h5 class="mb-1">Loại xe</h5>
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."/>
+                      Limousine
+                    </li>
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."/>
+                      36 Giường thường
+                    </li>
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."/>
+                      24 Giường thường
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -76,12 +133,13 @@ function ResultTicket() {
               <select
                 class="form-select select-filter"
                 aria-label="Default select example"
+                onChange={handleOrder}
               >
                 <option selected>Sắp xếp theo</option>
-                <option value="1">Khởi hành sớm nhất</option>
-                <option value="2">Khởi hành muộn nhất</option>
-                <option value="3">Giá từ cao đến thấp</option>
-                <option value="4">Giá từ thấp đến cao</option>
+                <option value="0">Khởi hành sớm nhất</option>
+                <option value="1">Khởi hành muộn nhất</option>
+                <option value="2">Giá từ cao đến thấp</option>
+                <option value="3">Giá từ thấp đến cao</option>
               </select>
             </div>
 
@@ -97,16 +155,16 @@ function ResultTicket() {
                       />
                     </div>
                     <div class="col-md-8">
-                      <div class="card-body">
+                      <div class="card-body h-100 position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                           <h5 class="card-title">Nhà Xe {car.lines.name}</h5>
                           <span class="badge rounded-pill bg-info text-dark">
-                            {car.lines.price}
+                            {moneyFormatter(car.price)}
                           </span>
                         </div>
                         <p class="card-text">
                           <small class="text-muted">
-                            Limousine {car.lines.capacity} giường
+                            Limousine {car.lines.type} giường
                           </small>
                         </p>
                         <div class="from-to d-flex justify-content-start">
@@ -142,15 +200,15 @@ function ResultTicket() {
                           <div class="from-to-content">
                             <div class="content from d-flex">
                               <div class="hour">{car.departure_time}</div>
-                              <div class="place">• {car.lines.station}</div>
+                              <div class="place">• Bến xe {car.station}</div>
                             </div>
                             <div class="duration">12h25m</div>
                             <div class="content to d-flex">
                               <div class="hour">{car.arrival_time}</div>
-                              <div class="place">• {car.lines.station_to}</div>
+                              <div class="place">• Bến xe {car.station_to}</div>
                             </div>
                           </div>
-                          <div class="button-book">
+                          <div class="button-book position-absolute bottom-1 end-0">
                               <Link to={`ticketbooking/${car.lines.id}?date=${date}`}>
                                 <button className="btn btn-primary">Đặt ngay</button>
                               </Link>

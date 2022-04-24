@@ -1,14 +1,9 @@
 import "../style.css";
 import React, { useState } from "react";
-import DatePicker from "react-multi-date-picker";
-import transition from "react-element-popper/animations/transition";
-import vi_VN from "./vi_VN";
 import Select from "react-select";
-import carService from "../services/car.service";
-import Search from "./Search";
 import ResultTicket from "./ResultTicket";
 import { province } from "../constants/Province";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function SearchTicket() {
   let history = useHistory();
@@ -19,14 +14,8 @@ function SearchTicket() {
   //   { value: "Hà Nội", label: "Hà Nội" },
   // ];
   const options = province;
-  const styleDatePicker = {
-    width: "100%",
-    height: "38px",
-    borderRadius: "4px",
-    fontSize: "14px",
-    textAlign: "center",
-  };
-  const [start, setStart] = useState(options[12].value);
+  
+  const [start, setStart] = useState(options[1].value);
   const [destination, setDestination] = useState(options[0].value);
   const [submited, setSubmited] = useState(false);
   const [data, setData] = useState([]);
@@ -73,7 +62,7 @@ function SearchTicket() {
                     <Select
                       className="basic-single"
                       classNamePrefix="select"
-                      defaultValue={options[12]}
+                      defaultValue={options[1]}
                       name="location"
                       options={options}
                       onChange={handleChangeStart}
