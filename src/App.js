@@ -32,12 +32,12 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import SignIn from "./components/SignIn/SignIn";
 import SignUp from "./components/SignUp/SignUp";
+import Router from "./router";
 
 function App() {
   return (
     <div className="App">
-      {/* <SignIn />
-      <SignUp /> */}
+      {/* <Router></Router> */}
       <Header />
 
       <Switch>
