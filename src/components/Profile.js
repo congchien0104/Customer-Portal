@@ -35,7 +35,7 @@ const Profile = () => {
          <strong>{currentUser.username}</strong>
       </h3>
       <ul className="list-group">
-        <li className="list-group-item">Tên Đăng Nhập: {user.username}</li>
+        <li className="list-group-item">Tên Đăng Nhập:</li>
         <li className="list-group-item">Email: {user.email}</li>
         <li className="list-group-item">Số Điện Thoại: {user.phone || "Chưa có"}</li>
         <li className="list-group-item">Địa Chỉ: {user.address || "Chưa có"}</li>

@@ -12,9 +12,9 @@ function SuccessPayment() {
               <div class="check"><i class="fa fa-check" aria-hidden="true"></i></div>
             </div>
             <div class="content">
-              <h1>Payment Success !</h1>
-              <p>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </p>
-              <a href="/" className='success-color'>Go to Home</a>
+              <h1>Thanh toán Paypal thành công !</h1>
+              <p>Bạn đã đặt vé xe thành công.</p>
+              <a href="/" className='success-color'>Quay lại trang chủ</a>
             </div>
           </div>
         </div>

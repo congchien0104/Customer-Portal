@@ -26,8 +26,8 @@ const getDetailCar = (id) => {
     headers: authHeader(),
   });
 };
-const search = (start, des, date, order) => {
-  return axios.get(API_URL + `cars/car/search?start=${start}&destination=${des}&date=${date}`, {
+const search = (start, des, date, order, minprice, maxprice) => {
+  return axios.get(API_URL + `cars/car/search?start=${start}&destination=${des}&date=${date}&order=${order}&minprice=${minprice}&maxprice=${maxprice}`, {
     headers: authHeader(),
   });
 };

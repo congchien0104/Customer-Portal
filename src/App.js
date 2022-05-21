@@ -42,8 +42,11 @@ function App() {
 
       <Switch>
         <Route exact path={["/", "/home"]} component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Register} />
+        {/* <Route path="/login" component={Login} /> */}
+        {/* <Route path="/signup" component={Register} /> */}
+        <Route path="/signup" component={SignUp} />
+        <Route path="/login" component={SignIn} />
+        
         <Route path="/confirm/:confirmationCode" component={Welcome} />
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/user/changepassword" component={ChangePassword} />

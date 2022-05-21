@@ -1,27 +1,50 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { MultiSelect } from "react-multi-select-component";
 import { Link } from "react-router-dom";
 import carService from "../services/car.service";
+import { Select } from "@mui/material";
+import { province } from "../constants/Province";
 
 function ResultTicket() {
   const queryString = window.location.search;
 
   const urlParams = new URLSearchParams(queryString);
 
-  const start = urlParams.get("start");
-  const destination = urlParams.get("destination");
-  const date = urlParams.get("date");
+  const starts = urlParams.get("start");
+  const destinations = urlParams.get("destination");
+  const dates = urlParams.get("date");
+
+
+  const provinces = province;
+  
+  const [start, setStart] = useState(starts);
+  const [destination, setDestination] = useState(destinations);
+  const [date, setDate] = useState(formatDate(dates));
+  const handleDate = (e) => {
+    setDate(e.target.value);
+  }
+  const handleChangeStart = (selectedOption) => {
+    setStart(selectedOption.value);
+  };
+  const handleChangeDes = (selectedOption) => {
+    setDestination(selectedOption.value);
+  };
+  console.log(start);
+  console.log(destination);
+  console.log(date);
 
   const [cars, setCars] = useState([]);
   const [order, setOrder] = useState(0);
   //const [price, setPrice] = useState(100);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(2000000);
+  const [selected, setSelected] = useState([]);
 
-  const result = (start, destination,date, order) => {
+  const result = (start, destination, date, order, minPrice, maxPrice) => {
     carService
-      .search(start, destination, date, order)
+      .search(start, destination, date, order, minPrice, maxPrice)
       .then((response) => {
         console.log(response.data);
         setCars(response.data.data.cars);
@@ -32,8 +55,8 @@ function ResultTicket() {
   };
 
   useEffect(() => {
-    result(start, destination,date, order);
-  }, []);
+    result(start, destination, date, order, minPrice, maxPrice);
+  }, [order, minPrice, maxPrice]);
 
   const handleOrder = (e) => {
     console.log(e.target.value);
@@ -59,10 +82,67 @@ function ResultTicket() {
     return result;
   };
 
+  const options = [
+    { label: "Limousine", value: "1" },
+    { label: "36 Giường thường", value: "2" },
+    { label: "24 Giường thường", value: "3" },
+  ];
+
   return (
     <div className="result-ticket pt-5 pb-5">
       <div className="container">
         <div className="row">
+            <form className="form-search">
+              <div className="row">
+                <div className="col-md-3">
+                  <div id="from" className="form-option">
+                    <label htmlFor="">Điểm đi</label>
+                    <Select
+                      className="basic-single"
+                      classNamePrefix="select"
+                      defaultValue={provinces[1]}
+                      name="location"
+                      options={provinces}
+                      //onChange={handleChangeStart}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-option">
+                    <label>Điểm đến</label>
+                    <Select
+                      className="basic-single"
+                      classNamePrefix="select"
+                      defaultValue={provinces[0]}
+                      name="location"
+                      options={provinces}
+                      //onChange={handleChangeDes}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-option">
+                    <label>Thời gian</label>
+                    <input
+                      className="form-control"
+                      name="date"
+                      type="date"
+                      min={formatDate(new Date())}
+                      defaultValue={formatDate(new Date())}
+                      onChange={(e) => {handleDate(e)}}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-option">
+                    <label>&nbsp;</label>
+                    <button type="submit" className="btn btn-block btn-primary btn-search">
+                      Tìm chuyến
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
           <div className="col-md-3">
             <p className="fs-5 fw-bolder badge bg-primary">Bộ lọc tìm kiếm</p>
             <div class="list-group">
@@ -104,7 +184,7 @@ function ResultTicket() {
                 </div>
               </div>
               <div class="list-group-item">
-                <div class="d-flex w-100 justify-content-between">
+                <div>
                   <h5 class="mb-1">Loại xe</h5>
                   <ul class="list-group">
                     <li class="list-group-item">
@@ -120,6 +200,25 @@ function ResultTicket() {
                       24 Giường thường
                     </li>
                   </ul>
+                  <MultiSelect
+                    options={options}
+                    value={selected}
+                    onChange={setSelected}
+                    labelledBy="Loại xe"
+                    disableSearch={true}
+                    valueRenderer={() => "Type"}
+                    ArrowRenderer={() => (
+                      <div
+                        style={{
+                          borderLeft: "1px solid #ccc",
+                          height: "40px",
+                          paddingLeft: "10px",
+                        }}
+                      >
+                      </div>
+                    )}
+                    ClearSelectedIcon={() => ""}
+                  />
                 </div>
               </div>
             </div>
@@ -225,4 +324,17 @@ function ResultTicket() {
     </div>
   );
 }
+
+const formatDate = (date) => {
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+};
+
 export default ResultTicket;
