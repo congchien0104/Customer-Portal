@@ -33,6 +33,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import SignIn from "./components/SignIn/SignIn";
 import SignUp from "./components/SignUp/SignUp";
 import Router from "./router";
+import Checkout from "./components/Booking/Checkout";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
         <Route path="/carlist/:id" component={CarDetails} />
 
         <Route exact path="/booking/:id" component={Booking} />
+        <Route exact path="/temp" component={Checkout} />
         <Route exact path="/booking-history/:id" component={BookingHistory} />
         <Route exact path="/lines" component={Lines} />
         <Route exact path="/lines/:id" component={RouteCar} />

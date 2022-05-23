@@ -311,6 +311,9 @@ function ResultTicket() {
                               <Link to={`ticketbooking/${car.lines.id}?date=${date}`}>
                                 <button className="btn btn-primary">Đặt ngay</button>
                               </Link>
+                              <Link to={`ticketbooking/${car.lines.id}?date=${date}`}>
+                                <button className="btn btn-primary">Đánh giá</button>
+                              </Link>
                           </div>
                         </div>
                       </div>
