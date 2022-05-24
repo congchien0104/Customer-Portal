@@ -77,6 +77,13 @@ export default function PaymentForm({journeys, handleAddress}) {
               Submit Address
             </Button>
           </Grid>
+          <Button variant="contained"
+                  type="submit"
+                  onClick={handleSubmit}
+                  sx={{ mt: 3, ml: 1 }}
+            >
+              Submit Address
+            </Button>
         </Grid>
       </Grid>
     </React.Fragment>

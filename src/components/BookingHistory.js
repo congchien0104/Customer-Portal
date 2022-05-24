@@ -25,60 +25,22 @@ function BookingHistory(props) {
         <section className="car-line">
       <div className="container">
         <h1 className="heading-title bg-warning text-dark">Danh sách Lịch Sử Đặt Vé: </h1>
-        {/* {books.map((item, index) => (
-          <div class="card mb-3">
-            <div class="row no-gutters">
-              <div class="col-md-4">
-                <img
-                  src={item.cars.image}
-                  class="card-img"
-                  alt="..."
-                />
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">
-                    Nhà Xe: {item.cars.name}
-                  </h5>
-                  <p class="card-text">
-                    Hành Trình: {item.cars.station} - {item.cars.station_to}
-                  </p>
-                  <p class="card-text">
-                    Mã Vé: {item.receipt_number}
-                  </p>
-                  <p class="card-text">
-                    Số lượng: {item.quantity}
-                  </p>
-                  <p class="card-text">
-                    Tổng Tiền: {item.amount}
-                  </p>
-                  <p class="card-text">
-                    Họ và Tên: {item.fullname}
-                  </p>
-                  <p class="card-text">
-                    Số Điện Thoại: {item.phone}
-                  </p>
-                  <p class="card-text">
-                    Ngày Đặt Vé: {formatDate(item.createdAt)}
-                  </p>
-                  <p class="card-text">
-                    Ngày Đi Xe: {formatDate(item.reservation_date)}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))} */}
-        <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="row g-4">
           {
             books.map((item, index) => (
-              <div class="col">
-                <div class="card">
-                  <img src="..." class="card-img-top" alt="..."/>
-                  <div class="card-body">
-                    <h5 class="card-title">{item.cars.name}</h5>
-                    <p class="card-text">Tổng Tiền: {moneyFormatter(item.amount)}</p>
-                    <p class="card-text">Hành Trình: {item.cars.station} - {item.cars.station_to}</p>
+              <div className="col-6" key={index}>
+                <div className="card">
+                  <img src={item.cars.image} className="card-img-top" alt="..."></img>
+                  <div className="card-body">
+                    <h5 className="card-title">Nhà xe {item.cars.name}</h5>
+                    <p className="card-text">Người đặt vé: {item.phone}</p>
+                    <p className="card-text">Số điện thoại: {item.fullname}</p>
+                    <p className="card-text">Hành Trình: {item.cars.station} - {item.cars.station_to}</p>
+                    <p className="card-text">Ngày đi: {formatDate(item.reservation_date, 1)}</p>
+                    <p className="card-text">Tổng Tiền: {moneyFormatter(item.amount)}</p>
+                  </div>
+                  <div className="card-footer">
+                  <p className="card-text"><small className="text-muted">Đã đặt {formatDate(item.createdAt)}</small></p>
                   </div>
                 </div>
               </div>
@@ -90,8 +52,10 @@ function BookingHistory(props) {
     );
 }
 
-const formatDate = (date) => {
+const formatDate = (date, option=0) => {
   var d = new Date(date),
+    minute = ""+ (d.getMinutes() + 1),
+    hours = "" + (d.getHours() + 1),
     month = "" + (d.getMonth() + 1),
     day = "" + d.getDate(),
     year = d.getFullYear();
@@ -99,7 +63,7 @@ const formatDate = (date) => {
   if (month.length < 2) month = "0" + month;
   if (day.length < 2) day = "0" + day;
 
-  return [year, month, day].join("-");
+  return option === 1 ? [day, month, year].join("-") : [hours, minute].join(":") + " ngày " + [day, month, year].join("-");
 };
 
 const moneyFormatter = (money) => {

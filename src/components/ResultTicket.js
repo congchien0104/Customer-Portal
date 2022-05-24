@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { MultiSelect } from "react-multi-select-component";
 import { Link } from "react-router-dom";
 import carService from "../services/car.service";
-import { Select } from "@mui/material";
+import Select from "react-select";
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { province } from "../constants/Province";
 
 function ResultTicket() {
@@ -31,22 +31,19 @@ function ResultTicket() {
   const handleChangeDes = (selectedOption) => {
     setDestination(selectedOption.value);
   };
-  console.log(start);
-  console.log(destination);
-  console.log(date);
 
   const [cars, setCars] = useState([]);
   const [order, setOrder] = useState(0);
-  //const [price, setPrice] = useState(100);
+  const [filter, setFilter] = useState();
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(2000000);
-  const [selected, setSelected] = useState([]);
+  //const [selected, setSelected] = useState([]);
 
   const result = (start, destination, date, order, minPrice, maxPrice) => {
     carService
       .search(start, destination, date, order, minPrice, maxPrice)
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.data.cars);
         setCars(response.data.data.cars);
       })
       .catch((e) => {
@@ -56,93 +53,91 @@ function ResultTicket() {
 
   useEffect(() => {
     result(start, destination, date, order, minPrice, maxPrice);
-  }, [order, minPrice, maxPrice]);
+  }, [start, destination, date, order, minPrice, maxPrice]);
 
   const handleOrder = (e) => {
-    console.log(e.target.value);
+    //console.log(e.target.value);
     setOrder(e.target.value);
   }
 
+  const handleFilter = (e) => {
+    console.log("temp filter: ",e.target.value);
+    setFilter(e.target.value);
+  }
+
+  useEffect(() => {
+    setCars(cars.filter((car) => car.price > 220000));
+  }, [filter]);
+
   const handleChangeMinPrice = (e) => {
-    console.log(e.target.value);
+    //console.log(e.target.value);
     setMinPrice(e.target.value);
   };
 
   const handleChangeMaxPrice = (e) => {
-    console.log(e.target.value);
+    //console.log(e.target.value);
     setMaxPrice(e.target.value);
   };
 
-  const moneyFormatter = (money) => {
-    if (!money) money = 0;
-    const result = new Intl.NumberFormat('it-IT', {
-        style: 'currency',
-        currency: 'VND',
-    }).format(money);
-    return result;
-  };
-
-  const options = [
-    { label: "Limousine", value: "1" },
-    { label: "36 Giường thường", value: "2" },
-    { label: "24 Giường thường", value: "3" },
-  ];
+  
 
   return (
-    <div className="result-ticket pt-5 pb-5">
+    <div className="result-ticket pb-5" style={{ "minHeight": "calc(100vh - 404px)" }}>
       <div className="container">
-        <div className="row">
-            <form className="form-search">
-              <div className="row">
-                <div className="col-md-3">
-                  <div id="from" className="form-option">
-                    <label htmlFor="">Điểm đi</label>
-                    <Select
-                      className="basic-single"
-                      classNamePrefix="select"
-                      defaultValue={provinces[1]}
-                      name="location"
-                      options={provinces}
-                      //onChange={handleChangeStart}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="form-option">
-                    <label>Điểm đến</label>
-                    <Select
-                      className="basic-single"
-                      classNamePrefix="select"
-                      defaultValue={provinces[0]}
-                      name="location"
-                      options={provinces}
-                      //onChange={handleChangeDes}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="form-option">
-                    <label>Thời gian</label>
-                    <input
-                      className="form-control"
-                      name="date"
-                      type="date"
-                      min={formatDate(new Date())}
-                      defaultValue={formatDate(new Date())}
-                      onChange={(e) => {handleDate(e)}}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="form-option">
-                    <label>&nbsp;</label>
-                    <button type="submit" className="btn btn-block btn-primary btn-search">
-                      Tìm chuyến
-                    </button>
-                  </div>
+        <div className="search mb-4 mt-4">
+          <form className="form-search">
+            <div className="row pr-2 pl-2">
+              <div className="col-md-3 p-0">
+                <div id="from" className="form-option p-0 m-1">
+                  <label className="text-primary fs-5 fw-bolder mt-0 mb-2">Điểm đi</label>
+                  <Select
+                    className="basic-single"
+                    classNamePrefix="select"
+                    defaultValue={starts}
+                    name="location"
+                    options={provinces}
+                    onChange={handleChangeStart}
+                  />
                 </div>
               </div>
-            </form>
+              <div className="col-md-3 p-0">
+                <div className="form-option p-0 m-1">
+                  <label className="text-primary fs-5 fw-bolder mt-0 mb-2">Điểm đến</label>
+                  <Select
+                    className="basic-single"
+                    classNamePrefix="select"
+                    defaultValue={destinations}
+                    name="location"
+                    options={provinces}
+                    onChange={handleChangeDes}
+                  />
+                </div>
+              </div>
+              <div className="col-md-3 p-0">
+                <div className="form-option p-0 m-1">
+                  <label className="text-primary fs-5 fw-bolder mt-0 mb-2">Thời gian</label>
+                  <input
+                    className="form-control"
+                    name="date"
+                    type="date"
+                    min={formatDate(new Date())}
+                    defaultValue={date}
+                    onChange={(e) => {handleDate(e)}}
+                  />
+                </div>
+              </div>
+              <div className="col-md-3 p-0">
+                <div className="form-option p-0 m-1">
+                  <label className="text-primary fs-5 fw-bolder mt-0 mb-2">&nbsp;</label>
+                  <button type="submit" className="btn btn-block btn-primary btn-search fw-bolder">
+                    Tìm chuyến
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div className="row">
           <div className="col-md-3">
             <p className="fs-5 fw-bolder badge bg-primary">Bộ lọc tìm kiếm</p>
             <div class="list-group">
@@ -185,61 +180,45 @@ function ResultTicket() {
               </div>
               <div class="list-group-item">
                 <div>
-                  <h5 class="mb-1">Loại xe</h5>
-                  <ul class="list-group">
-                    <li class="list-group-item">
-                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."/>
-                      Limousine
-                    </li>
-                    <li class="list-group-item">
-                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."/>
-                      36 Giường thường
-                    </li>
-                    <li class="list-group-item">
-                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."/>
-                      24 Giường thường
-                    </li>
-                  </ul>
-                  <MultiSelect
-                    options={options}
-                    value={selected}
-                    onChange={setSelected}
-                    labelledBy="Loại xe"
-                    disableSearch={true}
-                    valueRenderer={() => "Type"}
-                    ArrowRenderer={() => (
-                      <div
-                        style={{
-                          borderLeft: "1px solid #ccc",
-                          height: "40px",
-                          paddingLeft: "10px",
-                        }}
-                      >
-                      </div>
-                    )}
-                    ClearSelectedIcon={() => ""}
-                  />
+                  <FormControl>
+                    <FormLabel id="demo-radio-buttons-group-label">Loại xe</FormLabel>
+                    <RadioGroup
+                      aria-labelledby="demo-radio-buttons-group-label"
+                      defaultValue="1"
+                      name="radio-buttons-group"
+                      onChange={handleFilter}
+                    >
+                      <FormControlLabel value="1" control={<Radio />} label="All" />
+                      <FormControlLabel value="Limousine" control={<Radio />} label="Limousine" />
+                      <FormControlLabel value="36 Giường thường" control={<Radio />} label="36 Giường thường" />
+                      <FormControlLabel value="24 Giường thường" control={<Radio />} label="24 Giường thường" />
+                    </RadioGroup>
+                  </FormControl>
                 </div>
               </div>
             </div>
           </div>
           <div className="col-md-9">
-            <div className="result-top d-flex align-items-center justify-content-between">
-              <p className="fs-5 fw-bolder mb-0">
-                Đã tìm được:{" "}
-                <span className="badge rounded-pill bg-success">{cars.length} chuyến</span>
-              </p>
-              <select
-                class="form-select select-filter"
-                aria-label="Default select example"
-                onChange={handleOrder}
-              >
-                <option selected>Sắp xếp theo</option>
-                <option value="0">Khởi hành sớm nhất</option>
-                <option value="1">Khởi hành muộn nhất</option>
-                <option value="2">Giá từ cao đến thấp</option>
-                <option value="3">Giá từ thấp đến cao</option>
-              </select>
+            <div className="row result-top mb-2">
+              <div className="col-8 p-0">
+                <p className="fs-5 fw-bolder mb-0">
+                  Đã tìm được:{" "}
+                  <span className="badge rounded-pill bg-success">{cars.length} chuyến</span>
+                </p>
+              </div>
+              <div className="col-4 p-0">
+                <select
+                  class="form-select select-filter"
+                  aria-label="Default select example"
+                  onChange={handleOrder}
+                >
+                  <option selected>Sắp xếp theo</option>
+                  <option value="0">Khởi hành sớm nhất</option>
+                  <option value="1">Khởi hành muộn nhất</option>
+                  <option value="2">Giá từ cao đến thấp</option>
+                  <option value="3">Giá từ thấp đến cao</option>
+                </select>
+              </div>
             </div>
 
             {cars &&
@@ -338,6 +317,15 @@ const formatDate = (date) => {
   if (day.length < 2) day = "0" + day;
 
   return [year, month, day].join("-");
+};
+
+const moneyFormatter = (money) => {
+  if (!money) money = 0;
+  const result = new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+  }).format(money);
+  return result;
 };
 
 export default ResultTicket;
