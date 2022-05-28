@@ -34,6 +34,7 @@ import SignIn from "./components/SignIn/SignIn";
 import SignUp from "./components/SignUp/SignUp";
 import Router from "./router";
 import Checkout from "./components/Booking/Checkout";
+import InfoUser from "./components/InforUser";
 
 function App() {
   return (
@@ -49,7 +50,7 @@ function App() {
         <Route path="/login" component={SignIn} />
         
         <Route path="/confirm/:confirmationCode" component={Welcome} />
-        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/profile" component={InfoUser} />
         <Route exact path="/user/changepassword" component={ChangePassword} />
         <Route exact path="/user/update" component={UpdateUser} />
         <Route exact path="/carlist" component={CarList} />

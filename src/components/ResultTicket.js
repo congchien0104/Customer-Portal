@@ -6,6 +6,7 @@ import carService from "../services/car.service";
 import Select from "react-select";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { province } from "../constants/Province";
+import ReactStars from "react-rating-stars-component";
 
 function ResultTicket() {
   const queryString = window.location.search;
@@ -15,6 +16,11 @@ function ResultTicket() {
   const starts = urlParams.get("start");
   const destinations = urlParams.get("destination");
   const dates = urlParams.get("date");
+
+
+  console.log("start", starts);
+  console.log("des", destinations);
+  console.log(starts);
 
 
   const provinces = province;
@@ -33,8 +39,9 @@ function ResultTicket() {
   };
 
   const [cars, setCars] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
   const [order, setOrder] = useState(0);
-  const [filter, setFilter] = useState();
+  const [filter, setFilter] = useState("All");
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(2000000);
   //const [selected, setSelected] = useState([]);
@@ -65,9 +72,10 @@ function ResultTicket() {
     setFilter(e.target.value);
   }
 
-  useEffect(() => {
-    setCars(cars.filter((car) => car.price > 220000));
-  }, [filter]);
+  // useEffect(() => {
+  //   const carFilter = cars.filter((car) => car.type === filter);
+  //   setCars(carFilter);
+  // }, [filter]);
 
   const handleChangeMinPrice = (e) => {
     //console.log(e.target.value);
@@ -93,8 +101,9 @@ function ResultTicket() {
                   <Select
                     className="basic-single"
                     classNamePrefix="select"
-                    defaultValue={starts}
-                    name="location"
+                    //defaultValue={starts}
+                    value={{value: start, label: start}}
+                    name="start"
                     options={provinces}
                     onChange={handleChangeStart}
                   />
@@ -106,8 +115,9 @@ function ResultTicket() {
                   <Select
                     className="basic-single"
                     classNamePrefix="select"
-                    defaultValue={destinations}
-                    name="location"
+                    //defaultValue={destinations}
+                    value={{value: destination, label: destination}}
+                    name="destination"
                     options={provinces}
                     onChange={handleChangeDes}
                   />
@@ -184,11 +194,11 @@ function ResultTicket() {
                     <FormLabel id="demo-radio-buttons-group-label">Loại xe</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="1"
+                      defaultValue="All"
                       name="radio-buttons-group"
                       onChange={handleFilter}
                     >
-                      <FormControlLabel value="1" control={<Radio />} label="All" />
+                      <FormControlLabel value="All" control={<Radio />} label="All" />
                       <FormControlLabel value="Limousine" control={<Radio />} label="Limousine" />
                       <FormControlLabel value="36 Giường thường" control={<Radio />} label="36 Giường thường" />
                       <FormControlLabel value="24 Giường thường" control={<Radio />} label="24 Giường thường" />
@@ -203,7 +213,9 @@ function ResultTicket() {
               <div className="col-8 p-0">
                 <p className="fs-5 fw-bolder mb-0">
                   Đã tìm được:{" "}
-                  <span className="badge rounded-pill bg-success">{cars.length} chuyến</span>
+                  <span className="badge rounded-pill bg-success">{cars.filter((car) =>
+                filter === "All" ? true : car.type === filter
+              ).length} chuyến</span>
                 </p>
               </div>
               <div className="col-4 p-0">
@@ -222,12 +234,14 @@ function ResultTicket() {
             </div>
 
             {cars &&
-              cars.map((car, index) => (
+              cars.filter((car) =>
+                filter === "All" ? true : car.type === filter
+              ).map((car, index) => (
                 <div class="card mb-3">
                   <div class="row g-0">
                     <div class="col-md-4">
                       <img
-                        src={car.lines.image}
+                        src={car.image}
                         class="img-fluid rounded-start"
                         alt="..."
                       />
@@ -235,14 +249,14 @@ function ResultTicket() {
                     <div class="col-md-8">
                       <div class="card-body h-100 position-relative">
                         <div class="d-flex align-items-center justify-content-between">
-                          <h5 class="card-title">Nhà Xe {car.lines.name}</h5>
+                          <h5 class="card-title">Nhà Xe {car.name}</h5>
                           <span class="badge rounded-pill bg-info text-dark">
                             {moneyFormatter(car.price)}
                           </span>
                         </div>
                         <p class="card-text">
                           <small class="text-muted">
-                            Limousine {car.lines.type} giường
+                            Limousine {car.type}
                           </small>
                         </p>
                         <div class="from-to d-flex justify-content-start">
@@ -277,22 +291,54 @@ function ResultTicket() {
                           </svg>
                           <div class="from-to-content">
                             <div class="content from d-flex">
-                              <div class="hour">{car.departure_time}</div>
+                              <div class="hour">{car.lines.departure_time}</div>
                               <div class="place">• Bến xe {car.station}</div>
                             </div>
                             <div class="duration">12h25m</div>
                             <div class="content to d-flex">
-                              <div class="hour">{car.arrival_time}</div>
+                              <div class="hour">{car.lines.arrival_time}</div>
                               <div class="place">• Bến xe {car.station_to}</div>
                             </div>
                           </div>
-                          <div class="button-book position-absolute bottom-1 end-0">
+                          <div class="button-book position-absolute bottom-1 end-0 d-flex">
+                              <p className="mr-2">
+                                <a class="btn btn-primary" data-bs-toggle="collapse" href={`#${index}`} role="button" aria-expanded="false" aria-controls="collapseExample">
+                                  Xem đánh giá
+                                </a>
+                              </p>
                               <Link to={`ticketbooking/${car.lines.id}?date=${date}`}>
                                 <button className="btn btn-primary">Đặt ngay</button>
                               </Link>
-                              <Link to={`ticketbooking/${car.lines.id}?date=${date}`}>
-                                <button className="btn btn-primary">Đánh giá</button>
-                              </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="" id={index}>
+                    <div>
+                      <div className="car-feedbacks">
+                        <div className="card">
+                          <div class="card-header">Danh sách đánh giá</div>
+                          <div className="card-body" style={{ "maxHeight": "400px", "overflow":"hidden" , "overflowY": "scroll"}}>
+                            <div className="list-group list-group-flush">
+                              {car?.feedbacks ? (
+                                car?.feedbacks.map((feedback, index) => (
+                                  <a key={index} href="/" className="list-group-item list-group-item-action flex-column align-items-start">
+                                    <p className="feedback-username">{feedback.feedbacks.username || "Cong Chien"}</p>
+                                    <ReactStars
+                                      count={5}
+                                      value={feedback.rating}
+                                      size={18}
+                                      activeColor="#fb6e2e"
+                                    />
+                                    <p className="feedback-content">{feedback.content}</p>
+                                    <small className="feedback-time text-muted">{formatDate(feedback.createdAt)}</small>
+                                  </a>
+                                ))
+                              ) : (
+                                <div> Chưa có đánh giá.</div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>

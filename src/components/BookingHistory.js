@@ -3,7 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import reservationService from "../services/reservation.service";
 
 function BookingHistory(props) {
-    const { id } = useParams();
+    //const { id } = useParams();
+    const id = 14;
     const [books, setBooks] = useState([]);
     const getHistory = (id) => {
         reservationService.getBooking(id)

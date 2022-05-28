@@ -19,7 +19,7 @@ function CarDetails(props) {
     CarService.getCar(id)
       .then((response) => {
         setCar(response.data.data.car);
-        setLines(response.data.data.car.lines)
+        setLines(response.data.data.car.lines);
         console.log(car);
       })
       .catch((e) => {
