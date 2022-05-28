@@ -31,16 +31,16 @@ const Profile = () => {
   return (
     <div className="container">
      
-      <h3> Trang Cá Nhân:
+      <h3> Trang Cá Nhân: 
          <strong>{currentUser.username}</strong>
       </h3>
       <ul className="list-group">
         <li className="list-group-item">Tên Đăng Nhập:</li>
-        {/* <li className="list-group-item">Email: {user.email}</li>
-        <li className="list-group-item">Số Điện Thoại: {user.phone || "Chưa có"}</li>
-        <li className="list-group-item">Địa Chỉ: {user.address || "Chưa có"}</li>
+        <li className="list-group-item">Email: {user?.email}</li>
+        <li className="list-group-item">Số Điện Thoại: {user?.phone || "Chưa có"}</li>
+        <li className="list-group-item">Địa Chỉ: {user?.address || "Chưa có"}</li>
         <li className="list-group-item">Roles: {currentUser.roles &&
-          currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}</li> */}
+          currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}</li>
       </ul>
       
     </div>

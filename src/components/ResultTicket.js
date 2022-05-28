@@ -302,7 +302,7 @@ function ResultTicket() {
                           </div>
                           <div class="button-book position-absolute bottom-1 end-0 d-flex">
                               <p className="mr-2">
-                                <a class="btn btn-primary" data-bs-toggle="collapse" href={`#${index}`} role="button" aria-expanded="false" aria-controls="collapseExample">
+                                <a class="btn btn-primary" data-bs-toggle="collapse" href={`#comment${index}`} role="button" aria-expanded="false" aria-controls="collapseExample">
                                   Xem đánh giá
                                 </a>
                               </p>
@@ -314,7 +314,7 @@ function ResultTicket() {
                       </div>
                     </div>
                   </div>
-                  <div class="" id={index}>
+                  <div class="collapse" id={"comment" + index}>
                     <div>
                       <div className="car-feedbacks">
                         <div className="card">
