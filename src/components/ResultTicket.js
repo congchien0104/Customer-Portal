@@ -78,12 +78,12 @@ function ResultTicket() {
   // }, [filter]);
 
   const handleChangeMinPrice = (e) => {
-    //console.log(e.target.value);
+    console.log("min", e.target.value);
     setMinPrice(e.target.value);
   };
 
   const handleChangeMaxPrice = (e) => {
-    //console.log(e.target.value);
+    console.log("max",e.target.value);
     setMaxPrice(e.target.value);
   };
 
@@ -251,7 +251,7 @@ function ResultTicket() {
                         <div class="d-flex align-items-center justify-content-between">
                           <h5 class="card-title">Nhà Xe {car.name}</h5>
                           <span class="badge rounded-pill bg-info text-dark">
-                            {moneyFormatter(car.price)}
+                            {moneyFormatter(car?.lines[0].price)}
                           </span>
                         </div>
                         <p class="card-text">
@@ -306,7 +306,7 @@ function ResultTicket() {
                                   Xem đánh giá
                                 </a>
                               </p>
-                              <Link to={`ticketbooking/${car.lines.id}?date=${date}`}>
+                              <Link to={`ticketbooking/${car.id}?date=${date}`}>
                                 <button className="btn btn-primary">Đặt ngay</button>
                               </Link>
                           </div>

@@ -23,8 +23,8 @@ const validationSchema = Yup.object({
   
 
 
-export default function Review({
-  infor,
+export default function InformationForm({
+  information,
   onSubmit,
   }
   ) {
@@ -41,11 +41,11 @@ export default function Review({
 
     const formik = useFormik({
         initialValues: {
-          fullname: infor.fullname || '',
-          phone: infor.phone || '+84 ',
-          email: infor.email || '',
-          cccd: infor.cccd || '',
-          note: infor.note || '',
+          fullname: information.fullname || '',
+          phone: information.phone || '+84 ',
+          email: information.email || '',
+          cccd: information.cccd || '',
+          note: information.note || '',
         },
         validationSchema: validationSchema,
         onSubmit: handleSubmit,
@@ -143,6 +143,7 @@ export default function Review({
                 type="submit"
                 sx={{ mt: 3, ml: 1 }}
           >
+            Payment
         </Button>
       </Grid>
     </React.Fragment>

@@ -1,96 +1,90 @@
-import * as React from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import carService from "../../services/car.service";
+import * as React from 'react';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import { Button, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
-export default function AddressForm(props) {
-    const car = props;
-    console.log("car: ", car);
-  const id = 11;
-  //const [seats, setSeats] = React.useState(car.carseats);
-  const [choose, setChoose] = React.useState([]);
-  const [amount, setAmout] = React.useState(0);
+export default function AddressForm({journeys, total, handleAddress}) {
+    //const { journeys } = props;
+    console.log("journey", journeys);
+    console.log("total", total);
 
-//   const getCar = (id) => {
-//     carService
-//       .getCarSeat(id)
-//       .then((response) => {
-//         setSeats(response.data.data.car.carseats);
-//         console.log(response.data.data.car);
-//       })
-//       .catch((e) => {
-//         console.log(e);
-//       });
-//   };
-
-//   React.useEffect(() => {
-//     getCar(id);
-//   }, [id]);
-
-  const handleSeat = async (e) => {
-    if(e.target.checked){
-      await setChoose([...choose, e.target.name]);
-    }else{
-      await setChoose(choose.filter((name) => name !== e.target.name));
+    const [start, setStart] = React.useState('');
+    const [destination, setDestination] = React.useState('');
+    const handleChangeAddressGo = (e) => {
+      console.log(e.target.value);
+      setStart(e.target.value);
     }
-  }
+    const handleChangeAddressTo = (e) => {
+      console.log(e.target.value);
+      setDestination(e.target.value);
+    }
 
-  React.useEffect(() => {
-    setAmout(choose.length*200000)
-  }, [choose]);
-
+    const handleSubmit = async (values) => {
+      console.log("dkm");
+      try {
+        await handleAddress({start, destination});
+      } catch(error) {
+        console.log(error);
+      }
+    }
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Chỗ mong muốn
       </Typography>
-      <Grid container spacing={3}>
-        <div class="container">
-          <div class="row row-cols-3">
-            {car.carseats &&
-              car.carseats.map((seat, index) => (
-                <div class="col">
-                  <input
-                    type="checkbox"
-                    id={seat.id}
-                    name={seat.name}
-                    //disabled={flag.includes(seat.name)}
-                    onChange={(e) => handleSeat(e)}
-                  />
-                  <label for={seat.id}>{seat.name}</label>
-                </div>
-              ))}
-          </div>
-        </div>
-      </Grid>
-      <Grid container spacing={3}>
-          <div class="col-md-4 order-md-2 mb-4">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-              <span class="text-muted">Số vé</span>
-              <span class="badge badge-secondary badge-pill">{choose.length}</span>
-            </h4>
-            <ul class="list-group mb-3">
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+            Điểm đón
+          </Typography>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="0"
+            name="address_go"
+            onChange={handleChangeAddressGo}
+            >
               {
-                choose && choose.map((item) => (
-                  <li class="list-group-item d-flex justify-content-between lh-condensed" >
-                    <div class="text-success">
-                      <h6 class="my-0">{item}</h6>
-                    </div>
-                    <span class="text-muted">{car.price}</span>
-                  </li>
-                ))
+                journeys && journeys.map((item, index) => {
+                    if(!item.status) {
+                        return (
+                          <FormControlLabel key={index} value={item.address} control={<Radio />} label={ item.time_hour + "  " + item.address } />
+                        )
+                    }
+                })
               }
+          </RadioGroup>
+          
+          Total: { total }
+        </Grid>
+        <Grid item container direction="column" xs={12} sm={6}>
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+            Điểm trả
+          </Typography>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="0"
+            name="adrress_to"
+            onChange={handleChangeAddressTo}
+            >
               {
-                  <li class="list-group-item d-flex justify-content-between">
-                    <span>Tổng giá (VND)</span>
-                    <strong>{amount}</strong>
-                  </li>
+                journeys && journeys.map((item, index) => {
+                    if(item.status) {
+                        return (
+                          <FormControlLabel key={index} value={item.address} control={<Radio />} label={ item.time_hour + "  " + item.address } />
+                        )
+                    }
+                })
               }
-            </ul>
-          </div>
+          </RadioGroup>
+          <Grid item xs={12} sm={6}>
+            <Button variant="contained"
+                  type="submit"
+                  onClick={handleSubmit}
+                  sx={{ mt: 3, ml: 1 }}
+            >
+              Submit Address
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
     </React.Fragment>
   );

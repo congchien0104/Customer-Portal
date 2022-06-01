@@ -33,7 +33,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import SignIn from "./components/SignIn/SignIn";
 import SignUp from "./components/SignUp/SignUp";
 import Router from "./router";
-import Checkout from "./components/Booking/Checkout";
+import Checkout from "./components/Booking/Booking";
 import InfoUser from "./components/InforUser";
 
 function App() {

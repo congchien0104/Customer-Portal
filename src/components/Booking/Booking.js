@@ -12,11 +12,12 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Seats from './Seats';
 import AddressForm from './AddressForm';
-import PaymentForm from './PaymentForm';
-import Review from './Review';
+import InformationForm from './InformationForm';
 import { useParams } from 'react-router-dom';
 import carService from '../../services/car.service';
+import reservationService from '../../services/reservation.service';
 
 function Copyright() {
   return (
@@ -37,7 +38,7 @@ const steps = ['Chỗ mong muốn', 'Điểm đón trả', 'Nhập thông tin'];
 
 const theme = createTheme();
 
-export default function Checkout() {
+export default function Booking() {
 
     // My code 
     //const { id } = useParams();
@@ -54,7 +55,9 @@ export default function Checkout() {
 
     const [car, setCar] = React.useState();
     const [journeys, setJourneys] = React.useState([]);
-    const [basicInfor, setBasicInfor] = React.useState(initialValues);
+    const [information, setInformation] = React.useState(initialValues);
+
+    const [total, setTotal] = React.useState(0);
 
     const getCar = (id) => {
         carService
@@ -75,15 +78,57 @@ export default function Checkout() {
     getCar(id);
     }, [id]);
 
-    const handleSubmitBasicInfor = (data) => {
-      console.log("submit main", data);
-      setActiveStep(1);
+    
+
+    
+
+    // My phase 1
+    const handleSubmitSeat = (data) => {
+      console.log("cong chien", data);
+      setTotal(data?.amount);
+      setStep(1);
     }
+
+    // My phase 2
 
     const handleAddress = (data) => {
       console.log("handle Address", data);
-      setActiveStep(2);
+      setStep(2);
     }
+
+    // My phase 3
+
+    const handleSubmitInformation = (values) => {
+      console.log("submit main", values);
+
+
+      var data = {
+        amount: 200000,
+        carId: car.id,
+        quantity: 2,
+        reservations_date: new Date(),
+        fullname: values.fullname,
+        phone: values.phone,
+        email: values.email,
+        cccd: values.cccd,
+        pickup_place: "Eahleo",
+        dropoff_place: "Thu Duc",
+        arr: ['A1', 'A2']
+      }
+      console.log(data);
+      reservationService.paypal(data)
+      .then((response) => {
+        console.log(response.data);
+        window.location.href = response.data.data;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+      setStep(5);
+    }
+
+
 
 
 
@@ -92,28 +137,62 @@ export default function Checkout() {
     // end
 
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
+  const [step, setStep] = React.useState(0);
 
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
+  // const [activeStep, setActiveStep] = React.useState(0);
 
-  const getStepContent = (step) => {
+  // const handleNext = () => {
+  //   setActiveStep(activeStep + 1);
+  // };
+
+  // const handleBack = () => {
+  //   setActiveStep(activeStep - 1);
+  // };
+
+  // const getStepContent = (step) => {
+  //   switch (step) {
+  //     case 0:
+  //       return <AddressForm {...car}/>;
+  //     case 1:
+  //       return <AddressForm journeys={journeys} handleAddress={handleAddress}/>;
+  //     case 2:
+  //       return <Review infor={basicInfor} onSubmit={handleSubmitBasicInfor}/>;
+  //     default:
+  //       throw new Error('Unknown step');
+  //   }
+  // }
+
+  const renderPage = () => {
     switch (step) {
       case 0:
-        return <AddressForm {...car}/>;
+        return (
+          <Seats
+            car={car}
+            onSubmit={handleSubmitSeat}
+          />
+        );
       case 1:
-        return <PaymentForm journeys={journeys} handleAddress={handleAddress}/>;
+        return (
+          <AddressForm
+            journeys={journeys}
+            total={total}
+            handleAddress={handleAddress}
+          />
+        );
       case 2:
-        return <Review infor={basicInfor} onSubmit={handleSubmitBasicInfor}/>;
+        return (
+          <InformationForm
+            information={information} 
+            onSubmit={handleSubmitInformation}
+          />
+        );
       default:
-        throw new Error('Unknown step');
+        return <div></div>
     }
-  }
+  };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -206,7 +285,7 @@ export default function Checkout() {
           <Typography component="h1" variant="h4" align="center">
             Thông Tin Đặt Vé
           </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+          <Stepper step={step} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -214,6 +293,9 @@ export default function Checkout() {
             ))}
           </Stepper>
           <React.Fragment>
+            {renderPage()}
+          </React.Fragment>
+          {/* <React.Fragment>
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
@@ -245,9 +327,8 @@ export default function Checkout() {
                 </Box>
               </React.Fragment>
             )}
-          </React.Fragment>
+          </React.Fragment> */}
         </Paper>
-        <Copyright />
       </Container>
     </ThemeProvider>
   );
