@@ -16,7 +16,6 @@ import CarList from "./components/CarList";
 import ChangePassword from "./components/ChangePassword";
 import UpdateUser from "./components/UpdateUser";
 import CarDetails from "./components/CarDetails";
-import Booking from "./components/Booking";
 import Lines from "./components/Lines";
 import Company from "./components/Company";
 import Contact from "./components/Contact";
@@ -33,7 +32,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import SignIn from "./components/SignIn/SignIn";
 import SignUp from "./components/SignUp/SignUp";
 import Router from "./router";
-import Checkout from "./components/Booking/Booking";
+import Booking from "./components/Booking/Booking";
 import InfoUser from "./components/InforUser";
 
 function App() {
@@ -56,8 +55,7 @@ function App() {
         <Route exact path="/carlist" component={CarList} />
         <Route path="/carlist/:id" component={CarDetails} />
 
-        <Route exact path="/booking/:id" component={Booking} />
-        <Route exact path="/temp" component={Checkout} />
+        {/* <Route exact path="/booking/:id" component={Booking} /> */}
         <Route exact path="/booking-history/:id" component={BookingHistory} />
         <Route exact path="/lines" component={Lines} />
         <Route exact path="/lines/:id" component={RouteCar} />
@@ -66,7 +64,8 @@ function App() {
         <Route exact path="/payment-success" component={SuccessPayment} />
         <Route exact path="/payment-denied" component={DenyPayment} />
         <Route exact path="/resultticket" component={ResultTicket} />
-        <Route exact path="/ticketbooking/:id" component={TicketBooking} />
+        <Route exact path="/ticketbooking/:id" component={Booking} />
+        {/* <Route exact path="/ticketbooking/:id" component={TicketBooking} /> */}
         <Route path="/forgot" component={ForgetPassword} />
         <Route path="/reset/:confirmationCode" component={NewPassword} />
         <Route path="*" component={NotFound} />

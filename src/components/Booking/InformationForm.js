@@ -139,6 +139,12 @@ export default function InformationForm({
             label="Sử dụng Paypal để thanh toán"
           />
         </Grid>
+        <Grid item xs={12}>
+          <FormControlLabel
+            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+            label="Thanh toán trực tiếp tới nhà xe"
+          />
+        </Grid>
         <Button variant="contained"
                 type="submit"
                 sx={{ mt: 3, ml: 1 }}

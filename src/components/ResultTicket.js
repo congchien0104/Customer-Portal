@@ -256,7 +256,7 @@ function ResultTicket() {
                         </div>
                         <p class="card-text">
                           <small class="text-muted">
-                            Limousine {car.type}
+                            {car?.type}
                           </small>
                         </p>
                         <div class="from-to d-flex justify-content-start">
@@ -291,13 +291,13 @@ function ResultTicket() {
                           </svg>
                           <div class="from-to-content">
                             <div class="content from d-flex">
-                              <div class="hour">{car.lines.departure_time}</div>
-                              <div class="place">• Bến xe {car.station}</div>
+                              <div class="hour">{car?.lines[0]?.departure_time}</div>
+                              <div class="place">• Bến xe {car?.lines[0]?.station}</div>
                             </div>
                             <div class="duration">12h25m</div>
                             <div class="content to d-flex">
-                              <div class="hour">{car.lines.arrival_time}</div>
-                              <div class="place">• Bến xe {car.station_to}</div>
+                              <div class="hour">{car?.lines[0]?.arrival_time}</div>
+                              <div class="place">• Bến xe {car?.lines[0]?.station_to}</div>
                             </div>
                           </div>
                           <div class="button-book position-absolute bottom-1 end-0 d-flex">
@@ -330,6 +330,7 @@ function ResultTicket() {
                                       value={feedback.rating}
                                       size={18}
                                       activeColor="#fb6e2e"
+                                      disabled={true}
                                     />
                                     <p className="feedback-content">{feedback.content}</p>
                                     <small className="feedback-time text-muted">{formatDate(feedback.createdAt)}</small>

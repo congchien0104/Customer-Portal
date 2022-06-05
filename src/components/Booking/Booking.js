@@ -19,18 +19,6 @@ import { useParams } from 'react-router-dom';
 import carService from '../../services/car.service';
 import reservationService from '../../services/reservation.service';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const steps = ['Chỗ mong muốn', 'Điểm đón trả', 'Nhập thông tin'];
 
@@ -41,7 +29,7 @@ const theme = createTheme();
 export default function Booking() {
 
     // My code 
-    //const { id } = useParams();
+    const { id } = useParams();
 
     const initialValues = {
       fullname: '',
@@ -50,14 +38,13 @@ export default function Booking() {
       cccd: '',
       note: '',
     };
-
-    const id = 11;
-
     const [car, setCar] = React.useState();
     const [journeys, setJourneys] = React.useState([]);
     const [information, setInformation] = React.useState(initialValues);
 
     const [total, setTotal] = React.useState(0);
+    const [pickup, setPickup] = React.useState();
+    const [dropoff, setDropoff] = React.useState();
 
     const getCar = (id) => {
         carService
@@ -93,6 +80,8 @@ export default function Booking() {
 
     const handleAddress = (data) => {
       console.log("handle Address", data);
+      setPickup(data?.start);
+      setDropoff(data?.destination);
       setStep(2);
     }
 
@@ -103,16 +92,16 @@ export default function Booking() {
 
 
       var data = {
-        amount: 200000,
+        amount: total,
         carId: car.id,
         quantity: 2,
-        reservations_date: new Date(),
+        reservations_date: new Date(),  // change reservation_date
         fullname: values.fullname,
         phone: values.phone,
         email: values.email,
         cccd: values.cccd,
-        pickup_place: "Eahleo",
-        dropoff_place: "Thu Duc",
+        pickup_place: pickup || "Eahleo",
+        dropoff_place: dropoff || "Thu Duc",
         arr: ['A1', 'A2']
       }
       console.log(data);
@@ -196,7 +185,7 @@ export default function Booking() {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      {/* <CssBaseline />
       <AppBar
         position="absolute"
         color="default"
@@ -211,7 +200,7 @@ export default function Booking() {
             Company name
           </Typography>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
             <div class="card mb-3">
                   <div class="row g-0">
