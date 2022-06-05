@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import authService from "../services/auth.service";
 import reservationService from "../services/reservation.service";
+import { SuccessNotify } from "../utils/Notify";
 
 function BookingHistory(props) {
 
@@ -9,10 +10,12 @@ function BookingHistory(props) {
     //console.log("user", currentUser.id);
     const id = currentUser.id;
     const [books, setBooks] = useState([]);
+    const [result, setResult] = useState([]);
     const getHistory = (id) => {
         reservationService.getBooking(id)
           .then((response) => {
-            setBooks(response.data.data.reservation);
+            setBooks(response.data.data.result);
+            setResult(response.data.data.reservation);
             console.log(response.data);
           })
           .catch((e) => {
@@ -24,12 +27,50 @@ function BookingHistory(props) {
       }, [id]);
 
     console.log(books);
+
+    const handleCancel = (id) => {
+      reservationService.updateStatus(id)
+        .then((response) => {
+          console.log(response.data);
+          
+          getHistory(id);
+          SuccessNotify("Huy ve thanh cong.")
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
     
     return (
         <section className="car-line">
       <div className="container">
         <h1 className="heading-title bg-warning text-dark">Danh sách Lịch Sử Đặt Vé: </h1>
         <div class="tickets-list row" style={{ "height": "44rem", "overflow": "hidden", "overflowY": "scroll" }}>
+        {
+            (result || []).map((item, index) => (
+              <div class="col-6 mt-0 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <figure style={{ "width": "20rem", "height": "10rem", "overflow": "hidden", "marginLeft": "auto", "marginRight": "auto" }}>
+                      <img src={item.cars.image} style={{ "width": "100%", "height": "100%", "objectFit": "cover" }} alt="..." />
+                    </figure>
+                    <p className="card-title fs-4 text-center fw-bolder mb-2">Nhà xe {item?.cars?.name}</p>
+                    <p className="card-text mb-2">Tuyến: {item?.cars?.station} - {item?.cars.station_to}</p>
+                    <p className="card-text mb-2">Ngày đi: {formatDate(item.reservation_date, 1)}</p>
+                    <p className="card-text mb-2">Người đặt vé: {item.fullname}</p>
+                    <p className="card-text mb-2">Số điện thoại: {item.phone}</p>
+                    <p className="card-text mb-2">Tổng Tiền: {moneyFormatter(item.amount)}</p>
+                    <div>
+                      <button className="btn-danger" onClick={ () => handleCancel(item.id)}>Huy</button>
+                    </div>
+                  </div>
+                  <div className="card-footer">
+                    <p className="card-text"><small className="text-muted">Đã đặt {formatDate(item.createdAt)}</small></p>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
           {
             books.map((item, index) => (
               <div class="col-6 mt-0 mb-4">

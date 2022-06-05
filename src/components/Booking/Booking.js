@@ -102,7 +102,8 @@ export default function Booking() {
         cccd: values.cccd,
         pickup_place: pickup || "Eahleo",
         dropoff_place: dropoff || "Thu Duc",
-        arr: ['A1', 'A2']
+        arr: ['A1', 'A2'],
+        status: 'active',
       }
       console.log(data);
       reservationService.paypal(data)

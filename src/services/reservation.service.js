@@ -15,6 +15,12 @@ const create = (id, data) => {
   });
 };
 
+const updateStatus = (id) => {
+  return axios.put(API_URL + `reservations/${id}`, {
+    headers: authHeader(),
+  });
+};
+
 const paypal = async (data) => {
   return await axios.post(API_URL + 'payments/createpaypal', data, {
     headers: authHeader(),
@@ -32,5 +38,6 @@ export default {
   create,
   paypal,
   getBooking,
-  getPosition
+  getPosition,
+  updateStatus,
 };
