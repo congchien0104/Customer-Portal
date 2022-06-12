@@ -19,7 +19,6 @@ import { useParams } from 'react-router-dom';
 import carService from '../../services/car.service';
 import reservationService from '../../services/reservation.service';
 
-
 const steps = ['Chỗ mong muốn', 'Điểm đón trả', 'Nhập thông tin'];
 
 
@@ -28,85 +27,85 @@ const theme = createTheme();
 
 export default function Booking() {
 
-    // My code 
-    const { id } = useParams();
+  // My code 
+  const { id } = useParams();
 
-    const initialValues = {
-      fullname: '',
-      phone: '+84',
-      email: '',
-      cccd: '',
-      note: '',
-    };
-    const [car, setCar] = React.useState();
-    const [journeys, setJourneys] = React.useState([]);
-    const [information, setInformation] = React.useState(initialValues);
+  const initialValues = {
+    fullname: '',
+    phone: '+84',
+    email: '',
+    cccd: '',
+    note: '',
+  };
+  const [car, setCar] = React.useState();
+  const [journeys, setJourneys] = React.useState([]);
+  const [information, setInformation] = React.useState(initialValues);
 
-    const [total, setTotal] = React.useState(0);
-    const [pickup, setPickup] = React.useState();
-    const [dropoff, setDropoff] = React.useState();
+  const [total, setTotal] = React.useState(0);
+  const [pickup, setPickup] = React.useState();
+  const [dropoff, setDropoff] = React.useState();
 
-    const getCar = (id) => {
-        carService
-          .getCarSeat(id)
-          .then((response) => {
-            setCar(response.data.data.car);
-            setJourneys(response.data.data.journeys);
-            console.log(response.data.data.journeys);
-          })
-          .catch((e) => {
-            console.log(e);
-        });
-    };
+  const getCar = (id) => {
+    carService
+      .getCarSeat(id)
+      .then((response) => {
+        setCar(response.data.data.car);
+        setJourneys(response.data.data.journeys);
+        console.log(response.data.data.journeys);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
-    console.log(journeys);
-    
-    React.useEffect(() => {
+  console.log(journeys);
+
+  React.useEffect(() => {
     getCar(id);
-    }, [id]);
+  }, [id]);
 
-    
 
-    
 
-    // My phase 1
-    const handleSubmitSeat = (data) => {
-      console.log("cong chien", data);
-      setTotal(data?.amount);
-      setStep(1);
+
+
+  // My phase 1
+  const handleSubmitSeat = (data) => {
+    console.log("cong chien", data);
+    setTotal(data?.amount);
+    setStep(1);
+  }
+
+  // My phase 2
+
+  const handleAddress = (data) => {
+    console.log("handle Address", data);
+    setPickup(data?.start);
+    setDropoff(data?.destination);
+    setStep(2);
+  }
+
+  // My phase 3
+
+  const handleSubmitInformation = (values) => {
+    console.log("submit main", values);
+
+
+    var data = {
+      amount: total,
+      carId: car.id,
+      quantity: 2,
+      reservations_date: new Date(),  // change reservation_date
+      fullname: values.fullname,
+      phone: values.phone,
+      email: values.email,
+      cccd: values.cccd,
+      pickup_place: pickup || "Eahleo",
+      dropoff_place: dropoff || "Thu Duc",
+      arr: ['A1', 'A2'],
+      status: 'active',
     }
-
-    // My phase 2
-
-    const handleAddress = (data) => {
-      console.log("handle Address", data);
-      setPickup(data?.start);
-      setDropoff(data?.destination);
-      setStep(2);
-    }
-
-    // My phase 3
-
-    const handleSubmitInformation = (values) => {
-      console.log("submit main", values);
-
-
-      var data = {
-        amount: total,
-        carId: car.id,
-        quantity: 2,
-        reservations_date: new Date(),  // change reservation_date
-        fullname: values.fullname,
-        phone: values.phone,
-        email: values.email,
-        cccd: values.cccd,
-        pickup_place: pickup || "Eahleo",
-        dropoff_place: dropoff || "Thu Duc",
-        arr: ['A1', 'A2'],
-        status: 'active',
-      }
-      console.log(data);
-      reservationService.paypal(data)
+    console.log(data);
+    reservationService.paypal(data)
       .then((response) => {
         console.log(response.data);
         window.location.href = response.data.data;
@@ -115,8 +114,8 @@ export default function Booking() {
         console.log(e);
       });
 
-      setStep(5);
-    }
+    setStep(5);
+  }
 
 
 
@@ -124,10 +123,10 @@ export default function Booking() {
 
 
 
-    // end
+  // end
 
 
-  
+
 
   const [step, setStep] = React.useState(0);
 
@@ -174,7 +173,7 @@ export default function Booking() {
       case 2:
         return (
           <InformationForm
-            information={information} 
+            information={information}
             onSubmit={handleSubmitInformation}
           />
         );
@@ -202,75 +201,33 @@ export default function Booking() {
           </Typography>
         </Toolbar>
       </AppBar> */}
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-            <div class="card mb-3">
-                  <div class="row g-0">
-                    <div class="col-md-4">
-                      <img
-                        src={car?.image}
-                        class="img-fluid rounded-start"
-                        alt="..."
-                      />
-                    </div>
-                    <div class="col-md-8">
-                      <div class="card-body h-100 position-relative">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <h5 class="card-title">Nhà Xe {car?.name}</h5>
-                          <span class="badge rounded-pill bg-info text-dark">
-                            {car?.price}
-                          </span>
-                        </div>
-                        <p class="card-text">
-                          <small class="text-muted">
-                            Limousine giường
-                          </small>
-                        </p>
-                        <div class="from-to d-flex justify-content-start">
-                          <svg
-                            class="TicketPC__LocationRouteSVG-sc-1mxgwjh-4 eKNjJr"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="14"
-                            height="74"
-                            viewBox="0 0 14 74"
-                          >
-                            <path
-                              fill="none"
-                              stroke="#787878"
-                              stroke-linecap="round"
-                              stroke-width="2"
-                              stroke-dasharray="0 7"
-                              d="M7 13.5v46"
-                            ></path>
-                            <g fill="none" stroke="#484848" stroke-width="3">
-                              <circle
-                                cx="7"
-                                cy="7"
-                                r="7"
-                                stroke="none"
-                              ></circle>
-                              <circle cx="7" cy="7" r="5.5"></circle>
-                            </g>
-                            <path
-                              d="M7 58a5.953 5.953 0 0 0-6 5.891 5.657 5.657 0 0 0 .525 2.4 37.124 37.124 0 0 0 5.222 7.591.338.338 0 0 0 .506 0 37.142 37.142 0 0 0 5.222-7.582A5.655 5.655 0 0 0 13 63.9 5.953 5.953 0 0 0 7 58zm0 8.95a3.092 3.092 0 0 1-3.117-3.06 3.117 3.117 0 0 1 6.234 0A3.092 3.092 0 0 1 7 66.95z"
-                              fill="#787878"
-                            ></path>
-                          </svg>
-                          <div class="from-to-content">
-                            <div class="content from d-flex">
-                              <div class="hour">{car?.departure_time}</div>
-                              <div class="place">• Bến xe {car?.station}</div>
-                            </div>
-                            <div class="duration">12h25m</div>
-                            <div class="content to d-flex">
-                              <div class="hour">{car?.arrival_time}</div>
-                              <div class="place">• Bến xe {car?.station_to}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+      <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
+        <div class="card mb-3 mt-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img
+                src={car?.image}
+                class="img-fluid rounded-start"
+                alt="..."
+              />
+            </div>
+            <div class="col-md-8">
+              <div class="card-body h-100 position-relative">
+                <div class="d-flex align-items-center justify-content-between">
+                  <h5 class="card-title fs-3 fw-bolder">Nhà Xe {car?.name}</h5>
+                  <span class="badge rounded-pill bg-info text-dark fs-5 text-center">
+                    {car?.price} VNĐ
+                  </span>
                 </div>
+                <p class="card-text text-muted">Limousine {car?.capacity} giường</p>
+                <p class="card-text hour">{car?.departure_time}</p>
+                <p class="card-text place">Bến xe {car?.station}</p>
+                <p class="card-text hour">{car?.arrival_time}</p>
+                <p class="card-text place">Bến xe {car?.station_to}</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
             Thông Tin Đặt Vé

@@ -6,12 +6,15 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import carService from "../../services/car.service";
 import { Button } from "@mui/material";
+// import EventSeatSharpIcon from '@mui/icons-material/EventSeatSharp';
+import seat_img from "../../img/seat-img.png";
+import "./seat.css";
 
 export default function Seats(props) {
   const { car, onSubmit } = props;
   console.log("car: ", car);
 
-  
+
   const [choose, setChoose] = React.useState([]);
   const [amount, setAmout] = React.useState(0);
 
@@ -21,21 +24,21 @@ export default function Seats(props) {
 
 
   const handleSeat = async (e) => {
-    if(e.target.checked){
+    if (e.target.checked) {
       await setChoose([...choose, e.target.name]);
-    }else{
+    } else {
       await setChoose(choose.filter((name) => name !== e.target.name));
     }
   }
 
   React.useEffect(() => {
-    setAmout(choose.length*200000)
+    setAmout(choose.length * 200000)
   }, [choose]);
 
   const handleSubmit = async () => {
     console.log("dkm");
     console.log("choose", choose);
-    await onSubmit({choose: choose, amount: amount});
+    await onSubmit({ choose: choose, amount: amount });
   }
 
   // var temp = [];
@@ -43,7 +46,7 @@ export default function Seats(props) {
   // React.useEffect(() => {
   //   console.log(positions)
   //   if(positions.length > 0){
-      
+
   //    for(var i=0; i< positions.length; i++){
   //      console.log(positions[i].position.split(","));
   //     temp = positions[i].position.split(",");
@@ -57,64 +60,61 @@ export default function Seats(props) {
 
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        Chỗ mong muốn
-      </Typography>
-      <Grid container spacing={3}>
-        <div class="container">
-          <div class="row row-cols-3">
-            {car?.carseats &&
-              car?.carseats?.map((seat, index) => (
-                <div class="col">
-                  <input
-                    type="checkbox"
-                    id={seat.id}
-                    name={seat.name}
-                    //disabled={flag.includes(seat.name)}
-                    onChange={(e) => handleSeat(e)}
-                  />
-                  <label for={seat.id}>{seat.name}</label>
+      <div className="seat-placement row row-cols-6 mb-4 text-center">
+        {car?.carseats &&
+          car?.carseats?.map((seat, index) => (
+            <div className="col mb-3 seat-col">
+              <label for={seat.id} style={{"display":"inline"}}>
+                <input
+                  style={{"display":"none"}}
+                  type="checkbox"
+                  id={seat.id}
+                  name={seat.name}
+                  className="seat-checkbox"
+                  // disabled={flag.includes(seat.name)}
+                  // disabled
+                  onChange={(e) => handleSeat(e)}
+                />
+                <img src={seat_img} className="seat-img" width="30%" alt="seat"/>
+              </label>
+            </div>
+          ))}
+      </div>
+      <div className="">
+        <h4 className="d-flex justify-content-between align-items-center mb-3">
+          <Typography variant="h5" gutterBottom>
+            Số lượng
+          </Typography>
+          <span className="badge badge-secondary badge-pill">{choose.length}</span>
+        </h4>
+        <ul className="list-group mb-3">
+          {
+            choose && choose.map((item) => (
+              <li className="list-group-item d-flex justify-content-between lh-condensed" >
+                <div className="text-success">
+                  <h6 className="my-0">{item}</h6>
                 </div>
-              ))}
-          </div>
-        </div>
-      </Grid>
-      <Grid container spacing={3}>
-          <div class="col-md-4 order-md-2 mb-4">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-              <span class="text-muted">Số vé</span>
-              <span class="badge badge-secondary badge-pill">{choose.length}</span>
-            </h4>
-            <ul class="list-group mb-3">
-              {
-                choose && choose.map((item) => (
-                  <li class="list-group-item d-flex justify-content-between lh-condensed" >
-                    <div class="text-success">
-                      <h6 class="my-0">{item}</h6>
-                    </div>
-                    <span class="text-muted">{car.price}</span>
-                  </li>
-                ))
-              }
-              {
-                  <li class="list-group-item d-flex justify-content-between">
-                    <span>Tổng giá (VND)</span>
-                    <strong>{amount}</strong>
-                  </li>
-              }
-            </ul>
-          </div>
-          <Button
-          variant={'contained'}
-          fullWidth
-          type="submit"
-          onClick={handleSubmit}
-          //endIcon={<ArrowForwardIosIcon sx={{ height: '14px' }} />}
-          >
-            Next
-          </Button>
-
-      </Grid>
+                <span className="text-muted">{car.price}</span>
+              </li>
+            ))
+          }
+          {
+            <li className="list-group-item d-flex justify-content-between">
+              <span>Tổng giá (VND)</span>
+              <strong>{amount}</strong>
+            </li>
+          }
+        </ul>
+      </div>
+      <Button
+        variant={'contained'}
+        fullWidth
+        type="submit"
+        onClick={handleSubmit}
+      //endIcon={<ArrowForwardIosIcon sx={{ height: '14px' }} />}
+      >
+        Tiếp tục
+      </Button>
     </React.Fragment>
   );
 }

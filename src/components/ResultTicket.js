@@ -249,8 +249,8 @@ function ResultTicket() {
                     <div class="col-md-8">
                       <div class="card-body h-100 position-relative">
                         <div class="d-flex align-items-center justify-content-between">
-                          <h5 class="card-title">Nhà Xe {car.name}</h5>
-                          <span class="badge rounded-pill bg-info text-dark">
+                          <h5 class="card-title fw-bolder fs-4">Nhà Xe {car.name}</h5>
+                          <span class="badge rounded-pill bg-info text-dark fs-5">
                             {moneyFormatter(car?.lines[0].price)}
                           </span>
                         </div>
@@ -261,10 +261,10 @@ function ResultTicket() {
                         </p>
                         <div class="from-to d-flex justify-content-start">
                           <svg
-                            class="TicketPC__LocationRouteSVG-sc-1mxgwjh-4 eKNjJr"
+                            class="TicketPC__LocationRouteSVG-sc-1mxgwjh-4 eKNjJr mt-2"
                             xmlns="http://www.w3.org/2000/svg"
-                            width="14"
-                            height="74"
+                            width="30"
+                            height="60"
                             viewBox="0 0 14 74"
                           >
                             <path
@@ -291,23 +291,22 @@ function ResultTicket() {
                           </svg>
                           <div class="from-to-content">
                             <div class="content from d-flex">
-                              <div class="hour">{car?.lines[0]?.departure_time}</div>
-                              <div class="place">• Bến xe {car?.lines[0]?.station}</div>
+                              <p class="fs-5 hour">{car?.lines[0]?.departure_time}</p>
+                              <p class="fs-5 place">• Bến xe {car?.lines[0]?.station}</p>
                             </div>
-                            <div class="duration">12h25m</div>
                             <div class="content to d-flex">
-                              <div class="hour">{car?.lines[0]?.arrival_time}</div>
-                              <div class="place">• Bến xe {car?.lines[0]?.station_to}</div>
+                              <p class="fs-5 hour">{car?.lines[0]?.arrival_time}</p>
+                              <p class="fs-5 place">• Bến xe {car?.lines[0]?.station_to}</p>
                             </div>
                           </div>
-                          <div class="button-book position-absolute bottom-1 end-0 d-flex">
+                          <div class="button-book position-absolute bottom-0 end-0 d-flex">
                               <p className="mr-2">
-                                <a class="btn btn-primary" data-bs-toggle="collapse" href={`#comment${index}`} role="button" aria-expanded="false" aria-controls="collapseExample">
+                                <a class="btn btn-primary fw-bolder" data-bs-toggle="collapse" href={`#comment${index}`} role="button" aria-expanded="false" aria-controls="collapseExample">
                                   Xem đánh giá
                                 </a>
                               </p>
                               <Link to={`ticketbooking/${car.id}?date=${date}`}>
-                                <button className="btn btn-primary">Đặt ngay</button>
+                                <button className="btn btn-primary fw-bolder">Đặt ngay</button>
                               </Link>
                           </div>
                         </div>
