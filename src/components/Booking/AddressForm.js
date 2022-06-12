@@ -52,8 +52,6 @@ export default function AddressForm({ journeys, total, handleAddress }) {
               })
             }
           </RadioGroup>
-
-          {/* Total: {total} */}
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
           <Typography variant="h6" gutterBottom>
@@ -76,14 +74,29 @@ export default function AddressForm({ journeys, total, handleAddress }) {
             }
           </RadioGroup>
         </Grid>
-        <Button variant="contained"
-          type="submit"
-          onClick={handleSubmit}
-          sx={{ mt: 3 }}
-          fullWidth
-        >
-          Tiếp tục
-        </Button>
+        {/* <div className='row'>
+          <div className='col-6'>
+            
+          </div>
+          <div className='col-6'>
+
+          </div>
+        </div> */}
+        <Grid container sx={{ mt: 3 }}>
+          <Grid item xs={12} sm={6}>
+            Tổng tiền: {total}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Button variant="contained"
+              type="submit"
+              onClick={handleSubmit}              
+              fullWidth
+            >
+              Tiếp tục
+            </Button>
+          </Grid>
+        </Grid>
+        
       </Grid>
     </React.Fragment>
   );

@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { Button } from '@mui/material';
+import { Button, FormControl, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 const validationSchema = Yup.object({
   fullname: Yup.string()
@@ -29,11 +29,13 @@ export default function InformationForm({
 }
 ) {
 
-  const handleSubmit = async (values) => {
-    console.log(values);
+  const [typePayment, setTypePayment] = React.useState();
+
+  const handleSubmit = async (data) => {
+    console.log(data);
+    data.typePayment = typePayment;
     try {
-      console.log("dkm submit");
-      await onSubmit(values);
+      await onSubmit(data);
     } catch (error) {
       console.log(error);
     }
@@ -58,6 +60,11 @@ export default function InformationForm({
     formik.handleChange(event)
     await formik.validateField(fieldName)
     formik.handleBlur(event)
+  }
+
+  const handlePaymentType = (e) => {
+    console.log("type payment: ",e.target.value);
+    setTypePayment(e.target.value);
   }
 
 
@@ -134,7 +141,19 @@ export default function InformationForm({
           />
         </Grid>
         <Grid item xs={12}>
-          <FormControlLabel
+          <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">Hình thức thanh toán</FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="1"
+              name="radio-buttons-group"
+              onChange={handlePaymentType}
+            >
+              <FormControlLabel value="0" control={<Radio />} label="Sử dụng Paypal để thanh toán" />
+              <FormControlLabel value="1" control={<Radio />} label="Thanh toán trực tiếp khi lên xe" />
+            </RadioGroup>
+          </FormControl>
+          {/* <FormControlLabel
             control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
             label="Sử dụng Paypal để thanh toán"
             sx={{ display: 'block' }}
@@ -143,7 +162,7 @@ export default function InformationForm({
             control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
             label="Thanh toán trực tiếp tới nhà xe"
             sx={{ display: 'block' }}
-          />
+          /> */}
         </Grid>
         <Grid item xs={12}>
           <Button variant="contained"

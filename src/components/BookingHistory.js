@@ -34,7 +34,7 @@ function BookingHistory(props) {
           console.log(response.data);
           
           getHistory(id);
-          SuccessNotify("Huy ve thanh cong.")
+          SuccessNotify("Huy ve thanh cong.");
         })
         .catch((e) => {
           console.log(e);
@@ -55,13 +55,15 @@ function BookingHistory(props) {
                       <img src={item.cars.image} style={{ "width": "100%", "height": "100%", "objectFit": "cover" }} alt="..." />
                     </figure>
                     <p className="card-title fs-4 text-center fw-bolder mb-2">Nhà xe {item?.cars?.name}</p>
-                    <p className="card-text mb-2">Tuyến: {item?.cars?.station} - {item?.cars.station_to}</p>
+                    <p className="card-text mb-2">Tuyến: {item?.cars?.lines[0].station} - {item?.cars?.lines[0].station_to}</p>
                     <p className="card-text mb-2">Ngày đi: {formatDate(item.reservation_date, 1)}</p>
-                    <p className="card-text mb-2">Người đặt vé: {item.fullname}</p>
+                    <p className="card-text mb-2">Người đặt vé: {item.fullname || "Công Chiến"}</p>
+                    <p className="card-text mb-2">Mã vé: {item?.receipt_number}</p>
                     <p className="card-text mb-2">Số điện thoại: {item.phone}</p>
+                    <p className="card-text mb-2">Trạng thái: {item.status || 'Hoạt động'}</p>
                     <p className="card-text mb-2">Tổng Tiền: {moneyFormatter(item.amount)}</p>
                     <div>
-                      <button className="btn-danger" onClick={ () => handleCancel(item.id)}>Huy</button>
+                      <button className="btn btn-danger" onClick={ () => handleCancel(item.id)}>Hủy</button>
                     </div>
                   </div>
                   <div className="card-footer">
@@ -80,10 +82,11 @@ function BookingHistory(props) {
                       <img src={item.cars.image} style={{ "width": "100%", "height": "100%", "objectFit": "cover" }} alt="..." />
                     </figure>
                     <p className="card-title fs-4 text-center fw-bolder mb-2">Nhà xe {item.cars.name}</p>
-                    <p className="card-text mb-2">Tuyến: {item.cars.station} - {item.cars.station_to}</p>
+                    <p className="card-text mb-2">Tuyến: {item?.cars?.lines[0].station} - {item?.cars?.lines[0].station_to}</p>
                     <p className="card-text mb-2">Ngày đi: {formatDate(item.reservation_date, 1)}</p>
                     <p className="card-text mb-2">Người đặt vé: {item.fullname}</p>
                     <p className="card-text mb-2">Số điện thoại: {item.phone}</p>
+                    <p className="card-text mb-2">Trạng thái: {item.status || 'Hoàn thành'}</p>
                     <p className="card-text mb-2">Tổng Tiền: {moneyFormatter(item.amount)}</p>
                   </div>
                   <div className="card-footer">

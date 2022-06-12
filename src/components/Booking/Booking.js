@@ -29,6 +29,11 @@ export default function Booking() {
 
   // My code 
   const { id } = useParams();
+  const queryString = window.location.search;
+
+  const urlParams = new URLSearchParams(queryString);
+  const date = urlParams.get("date");
+  console.log(date);
 
   const initialValues = {
     fullname: '',
@@ -40,10 +45,12 @@ export default function Booking() {
   const [car, setCar] = React.useState();
   const [journeys, setJourneys] = React.useState([]);
   const [information, setInformation] = React.useState(initialValues);
+  const [positions, setPositions] = React.useState([]);
 
   const [total, setTotal] = React.useState(0);
   const [pickup, setPickup] = React.useState();
   const [dropoff, setDropoff] = React.useState();
+  const [tickets, setTickets] = React.useState([]);
 
   const getCar = (id) => {
     carService
@@ -58,11 +65,24 @@ export default function Booking() {
       });
   };
 
+  const getTicket = (id) => {
+    reservationService.getPosition(id, date)
+      .then((response) => {
+        setPositions(response.data.data.reservation);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   console.log(journeys);
 
   React.useEffect(() => {
     getCar(id);
+    getTicket(id);
   }, [id]);
+
+  console.log("ghe da dat", positions);
 
 
 
@@ -72,6 +92,7 @@ export default function Booking() {
   const handleSubmitSeat = (data) => {
     console.log("cong chien", data);
     setTotal(data?.amount);
+    setTickets(data?.choose);
     setStep(1);
   }
 
@@ -93,19 +114,19 @@ export default function Booking() {
     var data = {
       amount: total,
       carId: car.id,
-      quantity: 2,
-      reservations_date: new Date(),  // change reservation_date
+      quantity: tickets?.length || 0,
+      reservations_date: new Date(date),  // change reservation_date
       fullname: values.fullname,
       phone: values.phone,
       email: values.email,
       cccd: values.cccd,
       pickup_place: pickup || "Eahleo",
       dropoff_place: dropoff || "Thu Duc",
-      arr: ['A1', 'A2'],
+      arr: tickets,
       status: 'active',
     }
-    console.log(data);
-    reservationService.paypal(data)
+    if(values.typePayment === '0') {
+      reservationService.paypal(data)
       .then((response) => {
         console.log(response.data);
         window.location.href = response.data.data;
@@ -113,6 +134,10 @@ export default function Booking() {
       .catch((e) => {
         console.log(e);
       });
+    } else {
+      console.log("thanh toan sau ");
+    }
+    
 
     setStep(5);
   }
@@ -159,6 +184,7 @@ export default function Booking() {
         return (
           <Seats
             car={car}
+            positions={positions}
             onSubmit={handleSubmitSeat}
           />
         );
@@ -216,14 +242,13 @@ export default function Booking() {
                 <div class="d-flex align-items-center justify-content-between">
                   <h5 class="card-title fs-3 fw-bolder">Nhà Xe {car?.name}</h5>
                   <span class="badge rounded-pill bg-info text-dark fs-5 text-center">
-                    {car?.price} VNĐ
+                    {car?.lines[0]?.price} VNĐ
                   </span>
                 </div>
-                <p class="card-text text-muted">Limousine {car?.capacity} giường</p>
-                <p class="card-text hour">{car?.departure_time}</p>
-                <p class="card-text place">Bến xe {car?.station}</p>
-                <p class="card-text hour">{car?.arrival_time}</p>
-                <p class="card-text place">Bến xe {car?.station_to}</p>
+                <p class="card-text text-muted">{car?.type}</p>
+                <p class="card-text hour">Bắt đầu: {car?.lines[0].departure_time} Bến xe {car?.lines[0].station}</p>
+                <p class="card-text hour">Kết thúc: {car?.lines[0].arrival_time} Bến xe {car?.lines[0].station_to}</p>
+                <p class="card-text place">Ngày đặt: {date}</p>
               </div>
             </div>
           </div>

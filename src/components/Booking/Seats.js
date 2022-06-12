@@ -11,14 +11,15 @@ import seat_img from "../../img/seat-img.png";
 import "./seat.css";
 
 export default function Seats(props) {
-  const { car, onSubmit } = props;
+  const { car, positions, onSubmit } = props;
   console.log("car: ", car);
+  console.log("car:positions ", positions);
 
 
   const [choose, setChoose] = React.useState([]);
   const [amount, setAmout] = React.useState(0);
 
-  const [positions, setPositions] = React.useState([]);
+  //const [positions, setPositions] = React.useState([]);
   const [flag, setFlag] = React.useState([]);
 
 
@@ -36,27 +37,26 @@ export default function Seats(props) {
   }, [choose]);
 
   const handleSubmit = async () => {
-    console.log("dkm");
     console.log("choose", choose);
     await onSubmit({ choose: choose, amount: amount });
   }
 
-  // var temp = [];
-  // var result = [];
-  // React.useEffect(() => {
-  //   console.log(positions)
-  //   if(positions.length > 0){
+  var temp = [];
+  var result = [];
+  React.useEffect(() => {
+    console.log(positions)
+    if(positions.length > 0){
 
-  //    for(var i=0; i< positions.length; i++){
-  //      console.log(positions[i].position.split(","));
-  //     temp = positions[i].position.split(",");
-  //     result = result.concat(temp);
-  //    }
-  //    setFlag(result);
-  //     console.log(result);
-  //     console.log(result.includes("A3"));
-  //   }
-  // }, [positions]);
+     for(var i=0; i< positions.length; i++){
+       console.log(positions[i].position.split(","));
+      temp = positions[i].position.split(",");
+      result = result.concat(temp);
+     }
+     setFlag(result);
+      console.log(result);
+      console.log(result.includes("A2"));
+    }
+  }, [positions || []]);
 
   return (
     <React.Fragment>
@@ -71,8 +71,7 @@ export default function Seats(props) {
                   id={seat.id}
                   name={seat.name}
                   className="seat-checkbox"
-                  // disabled={flag.includes(seat.name)}
-                  // disabled
+                  disabled={flag.includes(seat.name)}
                   onChange={(e) => handleSeat(e)}
                 />
                 <img src={seat_img} className="seat-img" width="30%" alt="seat"/>
