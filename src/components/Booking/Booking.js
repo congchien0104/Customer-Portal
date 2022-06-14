@@ -109,12 +109,31 @@ export default function Booking() {
 
   const handleSubmitInformation = (values) => {
     console.log("submit main", values);
+    const dataToSave = [];
+
+    for(let i = 0; i < tickets.length; i++) {
+      var data = {
+        amount: total,
+        carId: car.id,
+        quantity: 1,
+        reservation_date: new Date(date),  // change reservation_date
+        fullname: values.fullname,
+        phone: values.phone,
+        email: values.email,
+        cccd: values.cccd,
+        pickup_place: pickup || "Eahleo",
+        dropoff_place: dropoff || "Thu Duc",
+        position: tickets[i],
+        status: 'active',
+      }
+      dataToSave.push(data);
+    }
 
 
     var data = {
       amount: total,
       carId: car.id,
-      quantity: tickets?.length || 0,
+      quantity: tickets?.length || 1,
       reservations_date: new Date(date),  // change reservation_date
       fullname: values.fullname,
       phone: values.phone,
@@ -136,6 +155,13 @@ export default function Booking() {
       });
     } else {
       console.log("thanh toan sau ");
+      reservationService.createReservation(id, dataToSave)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     }
     
 

@@ -1,8 +1,22 @@
+import { Box, Button, Modal, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import authService from "../services/auth.service";
 import reservationService from "../services/reservation.service";
 import { SuccessNotify } from "../utils/Notify";
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 function BookingHistory(props) {
 
@@ -11,6 +25,7 @@ function BookingHistory(props) {
     const id = currentUser.id;
     const [books, setBooks] = useState([]);
     const [result, setResult] = useState([]);
+    const [open, setOpen] = useState(false);
     const getHistory = (id) => {
         reservationService.getBooking(id)
           .then((response) => {
@@ -39,6 +54,10 @@ function BookingHistory(props) {
         .catch((e) => {
           console.log(e);
         });
+    }
+
+    const handleOpen =() => {
+      setOpen(true);
     }
     
     return (
@@ -88,6 +107,36 @@ function BookingHistory(props) {
                     <p className="card-text mb-2">Số điện thoại: {item.phone}</p>
                     <p className="card-text mb-2">Trạng thái: {item.status || 'Hoàn thành'}</p>
                     <p className="card-text mb-2">Tổng Tiền: {moneyFormatter(item.amount)}</p>
+                    <div>
+                      <Button onClick={handleOpen}>Xem chi tiết</Button>
+                      <Modal
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box sx={style}>
+                          <Typography id="modal-modal-title" variant="h6" component="h2">
+                          Xe: {item.cars.name}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Tuyến: {item?.cars?.lines[0].station} - {item?.cars?.lines[0].station_to}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Ngày đi: {formatDate(item.reservation_date, 1)}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Thời gian: {item?.cars?.lines[0].departure_time} - {item?.cars?.lines[0].arrival_time}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Biển số: { item.cars.plate_number}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Mã vé: { item?.receipt_number}
+                          </Typography>
+                        </Box>
+                      </Modal>
+                    </div>
                   </div>
                   <div className="card-footer">
                     <p className="card-text"><small className="text-muted">Đã đặt {formatDate(item.createdAt)}</small></p>

@@ -15,6 +15,12 @@ const create = (id, data) => {
   });
 };
 
+const createReservation = (id, data) => {
+  return axios.post(API_URL + `reservations/${id}`, data, {
+    headers: authHeader(),
+  });
+};
+
 const updateStatus = (id) => {
   return axios.put(API_URL + `reservations/${id}`, {
     headers: authHeader(),
@@ -40,4 +46,5 @@ export default {
   getBooking,
   getPosition,
   updateStatus,
+  createReservation,
 };
