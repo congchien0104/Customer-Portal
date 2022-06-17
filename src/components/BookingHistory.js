@@ -108,6 +108,11 @@ function BookingHistory(props) {
                     <p className="card-text mb-2">Trạng thái: {item.status || 'Hoàn thành'}</p>
                     <p className="card-text mb-2">Tổng Tiền: {moneyFormatter(item.amount)}</p>
                     <div>
+                      <Link to={`/carlist/${item?.carId}`} className="btn btn-success">
+                        Đánh Giá
+                      </Link>
+                    </div>
+                    <div>
                       <Button onClick={handleOpen}>Xem chi tiết</Button>
                       <Modal
                         open={open}
