@@ -14,6 +14,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import authService from '../../services/auth.service';
 import { ErrorNotify, SuccessNotify } from '../../utils/Notify';
+import { useHistory } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -50,12 +51,14 @@ const validationSchema = Yup.object({
 
 export default function SignUp() {
 
+  const history = useHistory();
+
   const handleSubmit = async (event) => {
-    console.log(event);
-    const { username, email, password } = event;
+    const { username, email, password, firstname, lastname } = event;
     try {
-      await authService.register(username, email, password).then((res) => {
+      await authService.register(username, email, password, firstname, lastname).then((res) => {
         SuccessNotify("Đăng Ký Thành Công");
+        history.push("/home");
       },(error) => {
         const resMessage =
           (error.response &&
@@ -174,7 +177,7 @@ export default function SignUp() {
                   fullWidth
                   name="passwordConfirmation"
                   label="Nhập Lại Mật Khẩu"
-                  type="passwordConfirmation"
+                  type="password"
                   onChange={formik.handleChange}
                   onBlur={(e) => onFieldBlur(e , 'passwordConfirmation')}
                   error={formik.touched.passwordConfirmation && Boolean(formik.errors.passwordConfirmation)}

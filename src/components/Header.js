@@ -107,7 +107,7 @@ function Header() {
                   </li>
                   <li className="nav-item">
                     <Link to={"/login"} className="nav-link" onClick={logOut}>
-                      Logout
+                      Đăng xuất
                     </Link>
                   </li>
                 </ul>
