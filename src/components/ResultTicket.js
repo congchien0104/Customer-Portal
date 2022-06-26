@@ -8,6 +8,7 @@ import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mu
 import { province } from "../constants/Province";
 import ReactStars from "react-rating-stars-component";
 import authService from "../services/auth.service";
+import { SuccessNotify } from "../utils/Notify";
 
 function ResultTicket() {
 
@@ -105,6 +106,7 @@ function ResultTicket() {
     if(currentUser) {
       history.push(`/ticketbooking/${id}?date=${date}`);
     } else {
+      SuccessNotify("Vui lòng đăng nhập để đặt vé");
       history.push('/login');
     }
   }
