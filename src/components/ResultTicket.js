@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import carService from "../services/car.service";
 import Select from "react-select";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { province } from "../constants/Province";
 import ReactStars from "react-rating-stars-component";
+import authService from "../services/auth.service";
 
 function ResultTicket() {
+
+  const [currentUser, setCurrentUser] = useState(undefined);
+
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+    if (user) {
+      setCurrentUser(user);
+    }
+    console.log(user);
+  }, []);
+
+  const history = useHistory();
+
   const queryString = window.location.search;
 
   const urlParams = new URLSearchParams(queryString);
@@ -63,7 +77,7 @@ function ResultTicket() {
   }, [start, destination, date, order, minPrice, maxPrice]);
 
   const handleOrder = (e) => {
-    //console.log(e.target.value);
+    console.log('ok',e.target.value);
     setOrder(e.target.value);
   }
 
@@ -86,6 +100,14 @@ function ResultTicket() {
     console.log("max",e.target.value);
     setMaxPrice(e.target.value);
   };
+
+  const handleBookService = (id, date) => {
+    if(currentUser) {
+      history.push(`/ticketbooking/${id}?date=${date}`);
+    } else {
+      history.push('/login');
+    }
+  }
 
   
 
@@ -298,6 +320,7 @@ function ResultTicket() {
                               <p class="fs-5 hour">{car?.lines[0]?.arrival_time}</p>
                               <p class="fs-5 place">• Bến xe {car?.lines[0]?.station_to}</p>
                             </div>
+                            <p>Trung binh Danh Gia: {car?.totalRating / car.feedbacks.length }</p>
                           </div>
                           <div class="button-book position-absolute bottom-0 end-0 d-flex">
                               <p className="mr-2">
@@ -305,9 +328,10 @@ function ResultTicket() {
                                   Xem đánh giá
                                 </a>
                               </p>
-                              <Link to={`ticketbooking/${car.id}?date=${date}`}>
+                              {/* <Link to={`ticketbooking/${car.id}?date=${date}`}>
                                 <button className="btn btn-primary fw-bolder">Đặt ngay</button>
-                              </Link>
+                              </Link> */}
+                              <button className="btn btn-primary fw-bolder" onClick={ () => handleBookService(car.id, date)}>Đặt ngay</button>
                           </div>
                         </div>
                       </div>
@@ -320,7 +344,7 @@ function ResultTicket() {
                           <div class="card-header">Danh sách đánh giá</div>
                           <div className="card-body" style={{ "maxHeight": "400px", "overflow":"hidden" , "overflowY": "scroll"}}>
                             <div className="list-group list-group-flush">
-                              {car?.feedbacks ? (
+                              {car?.feedbacks.length > 0 ? (
                                 car?.feedbacks.map((feedback, index) => (
                                   <a key={index} href="/" className="list-group-item list-group-item-action flex-column align-items-start">
                                     <p className="feedback-username">{feedback.feedbacks.username || "Cong Chien"}</p>
