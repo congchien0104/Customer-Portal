@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import { Button, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
 export default function AddressForm({ journeys, total, handleAddress }) {
-  //const { journeys } = props;
   console.log("journey", journeys);
   console.log("total", total);
 
@@ -20,7 +19,6 @@ export default function AddressForm({ journeys, total, handleAddress }) {
   }
 
   const handleSubmit = async (values) => {
-    console.log("dkm");
     try {
       await handleAddress({ start, destination });
     } catch (error) {

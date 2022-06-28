@@ -97,6 +97,7 @@ function CarDetails(props) {
                         count={5}
                         value={4}
                         size={24}
+                        edit={false}
                         activeColor="#fb6e2e"
                       />
                     </div>
@@ -177,6 +178,7 @@ function CarDetails(props) {
                             count={5}
                             value={feedback.rating}
                             size={18}
+                            edit={false}
                             activeColor="#fb6e2e"
                           />
                           <p className="feedback-content">{feedback.content}</p>

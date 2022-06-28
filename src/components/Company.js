@@ -62,6 +62,7 @@ function Company(props) {
                         companyService.create(data)
                         .then((response) => {
                           setSubmited(true);
+                          reset();
                           SuccessNotify("Yêu cầu của bạn đã được gửi đi, chờ xét duyện.");
                         })
                         .catch((error) => {

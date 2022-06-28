@@ -51,11 +51,11 @@ function Header() {
                   Nhà xe
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link to={"/lines"} className="nav-link">
                   Tuyến xe
                 </Link>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <Link to={"/contact"} className="nav-link">
                   Liên hệ

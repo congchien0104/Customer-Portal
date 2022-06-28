@@ -274,7 +274,21 @@ function ResultTicket() {
                       <div class="card-body h-100 position-relative">
                         <div class="d-flex align-items-center justify-content-between">
                           <h5 class="card-title fw-bolder fs-4">Nhà Xe {car.name}</h5>
-                          <span class="badge rounded-pill bg-info text-dark fs-5">
+                          <div className="d-flex align-items-center">
+                            <ReactStars
+                              count={5}
+                              value={car?.totalRating / car.feedbacks.length}
+                              size={24}
+                              activeColor="#fb6e2e"
+                              edit={false}
+                            />
+                            <a class="text-warning fw-bold text-decoration-none" data-bs-toggle="collapse" href={`#comment${index}`} role="button" aria-expanded="false" aria-controls="collapseExample">
+                              <span className="fs-5 fw-bold" style={{"marginLeft": ".25rem"}}>
+                                ( {car.feedbacks.length} )
+                              </span>
+                            </a>
+                          </div>
+                          <span class="text-success fw-bold fs-5">
                             {moneyFormatter(car?.lines[0].price)}
                           </span>
                         </div>
@@ -322,13 +336,12 @@ function ResultTicket() {
                               <p class="fs-5 hour">{car?.lines[0]?.arrival_time}</p>
                               <p class="fs-5 place">• Bến xe {car?.lines[0]?.station_to}</p>
                             </div>
-                            <p>Trung binh Danh Gia: {car?.totalRating / car.feedbacks.length }</p>
                           </div>
-                          <div class="button-book position-absolute bottom-0 end-0 d-flex">
-                              <p className="mr-2">
-                                <a class="btn btn-primary fw-bolder" data-bs-toggle="collapse" href={`#comment${index}`} role="button" aria-expanded="false" aria-controls="collapseExample">
-                                  Xem đánh giá
-                                </a>
+                          <div class="button-book position-absolute bottom-0 end-0 d-flex align-items-center">
+                              <p className="mr-4 mb-0">
+                                <Link to={`/carlist/${car.id}`} className="link-primary">
+                                  Xem chi tiết
+                                </Link>
                               </p>
                               {/* <Link to={`ticketbooking/${car.id}?date=${date}`}>
                                 <button className="btn btn-primary fw-bolder">Đặt ngay</button>

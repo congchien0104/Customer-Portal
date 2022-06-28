@@ -268,7 +268,7 @@ export default function Booking() {
                 <div class="d-flex align-items-center justify-content-between">
                   <h5 class="card-title fs-3 fw-bolder">Nhà Xe {car?.name}</h5>
                   <span class="badge rounded-pill bg-info text-dark fs-5 text-center">
-                    {car?.lines[0]?.price} VNĐ
+                    {moneyFormatter(car?.lines[0]?.price)}
                   </span>
                 </div>
                 <p class="card-text text-muted">{car?.type}</p>
@@ -331,3 +331,12 @@ export default function Booking() {
     </ThemeProvider>
   );
 }
+
+const moneyFormatter = (money) => {
+  if (!money) money = 0;
+  const result = new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+  }).format(money);
+  return result;
+};

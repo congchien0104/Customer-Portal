@@ -13,8 +13,8 @@ const validationSchema = Yup.object({
     .required('Vui lòng nhập họ và tên'),
   phone: Yup.string()
     .required('Vui lòng nhập số điện thoại'),
-  cccd: Yup.string()
-    .required('Vui lòng nhập CCCD/CMND'),
+  // cccd: Yup.string()
+  //   .required('Vui lòng nhập CCCD/CMND'),
   email: Yup.string()
     .required('Vui long nhập email')
     .email("Không phải là một email"),
@@ -124,11 +124,6 @@ export default function InformationForm({
             name="cccd"
             value={formik.values.cccd}
             onChange={formik.handleChange}
-            onBlur={(e) => onFieldBlur(e, 'cccd')}
-            error={formik.touched.cccd && Boolean(formik.errors.cccd)}
-            helperText={
-              (formik.touched.cccd && formik.errors.cccd)
-            }
           />
         </Grid>
         <Grid item xs={12}>
