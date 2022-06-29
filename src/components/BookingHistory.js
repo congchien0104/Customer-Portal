@@ -74,18 +74,18 @@ function BookingHistory(props) {
                     <figure style={{ "width": "20rem", "height": "10rem", "overflow": "hidden", "marginLeft": "auto", "marginRight": "auto" }}>
                       <img src={item.cars.image} style={{ "width": "100%", "height": "100%", "objectFit": "cover" }} alt="..." />
                     </figure>
-                    <p className="card-title fs-4 text-center fw-bolder mb-2">Nhà xe {item?.company?.name}</p>
+                    <p className="card-title fs-4 text-center text-primary fw-bolder mb-2">Nhà xe {item?.company?.name}</p>
                     <p className="card-text mb-2">Tuyến: {item?.cars?.lines[0].station} - {item?.cars?.lines[0].station_to}</p>
                     <p className="card-text mb-2">Ngày đi: {formatDate(item.reservation_date, 1)}</p>
                     <p className="card-text mb-2">Người đặt vé: {item.fullname || "Công Chiến"}</p>
                     <p className="card-text mb-2">Mã vé: {item?.receipt_number}</p>
+                    <p className="card-text mb-2">Vị trí ghế: {item?.position}</p>
                     <p className="card-text mb-2">Số điện thoại: {item.phone}</p>
-                    <p className="card-text mb-2 text-success">Trạng thái: {item.status || 'Hoạt động'}</p>
                     <p className="card-text mb-2">Tổng Tiền: {moneyFormatter(item.amount)}</p>
                     <div>
                       <button className="btn btn-danger" onClick={ () => handleCancel(item.id)}>Hủy</button>
                     </div>
-                    <div>
+                    {/* <div>
                       <Button onClick={handleOpen}>Xem chi tiết</Button>
                       <Modal
                         open={open}
@@ -114,10 +114,15 @@ function BookingHistory(props) {
                           </Typography>
                         </Box>
                       </Modal>
-                    </div>
+                    </div> */}
                   </div>
-                  <div className="card-footer">
+                  <div className="card-footer d-flex align-items-center justify-content-between">
                     <p className="card-text"><small className="text-muted">Đã đặt {formatDate(item.createdAt)}</small></p>
+                    <p className="card-text mb-2 text-success">
+                      {
+                        item.status === 'active' ? 'Hoạt động' : (item.status === 'cancelled' ? "Đã hủy" : "Hoàn thành")
+                      }
+                    </p>
                   </div>
                 </div>
               </div>
@@ -131,10 +136,12 @@ function BookingHistory(props) {
                     <figure style={{ "width": "20rem", "height": "10rem", "overflow": "hidden", "marginLeft": "auto", "marginRight": "auto" }}>
                       <img src={item.cars.image} style={{ "width": "100%", "height": "100%", "objectFit": "cover" }} alt="..." />
                     </figure>
-                    <p className="card-title fs-4 text-center fw-bolder mb-2">Nhà xe {item?.company?.name}</p>
+                    <p className="card-title fs-4 text-center text-primary fw-bolder mb-2">Nhà xe {item?.company?.name}</p>
                     <p className="card-text mb-2">Tuyến: {item?.cars?.lines[0].station} - {item?.cars?.lines[0].station_to}</p>
                     <p className="card-text mb-2">Ngày đi: {formatDate(item.reservation_date, 1)}</p>
                     <p className="card-text mb-2">Người đặt vé: {item.fullname}</p>
+                    <p className="card-text mb-2">Mã vé: {item?.receipt_number}</p>
+                    <p className="card-text mb-2">Vị trí ghế: {item?.position}</p>
                     <p className="card-text mb-2">Số điện thoại: {item.phone}</p>
                     <p className="card-text mb-2">Trạng thái: {item.status || 'Hoàn thành'}</p>
                     <p className="card-text mb-2">Tổng Tiền: {moneyFormatter(item.amount)}</p>
@@ -176,6 +183,9 @@ function BookingHistory(props) {
                   </div>
                   <div className="card-footer">
                     <p className="card-text"><small className="text-muted">Đã đặt {formatDate(item.createdAt)}</small></p>
+                    {
+                        item.status === 'active' ? 'Hoạt động' : (item.status === 'cancelled' ? "Đã hủy" : "Hoàn thành")
+                      }
                   </div>
                 </div>
               </div>

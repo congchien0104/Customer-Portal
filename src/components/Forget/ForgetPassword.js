@@ -28,7 +28,7 @@ function ForgetPassword() {
   }
   return (
     <div className="co-opration-company">
-      <div className="container">
+      <div className="container" style={{"height":"50vh"}}>
         <div>
           <h1 className="heading-title text-center">Quên Mật Khẩu</h1>
           <div className="row justify-content-center">

@@ -8,16 +8,16 @@ const Welcome = (props) => {
   }
 
   return (
-    <div className="container">
-      <h3>
-        <strong>Account confirmed!</strong>
+    <div className="container" style={{"height":"50vh"}}>
+      <h3 className="text-success fw-bold text-center" style={{"paddingTop":"20vh"}}>
+        <strong>Xác thực tài khoản thành công!</strong>
       </h3>
-      <div>
+      {/* <div>
         <Link to={"/login"} className="nav-link">
           Please Login
         </Link>
         Please Login
-      </div>
+      </div> */}
     </div>
   );
 };

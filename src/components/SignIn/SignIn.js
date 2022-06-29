@@ -135,12 +135,12 @@ export default function SignIn(props) {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
+                    <Link href="/forgot" variant="body2">
                       Quên mật khẩu?
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="#" variant="body2">
+                    <Link href="/signup" variant="body2">
                       {"Chưa có tài khoản? Đăng ký"}
                     </Link>
                   </Grid>
