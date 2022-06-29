@@ -50,8 +50,10 @@ const Login = (props) => {
       AuthService.login(username, password).then(
         () => {
           SuccessNotify("Đăng Nhập Thành Công");
-          props.history.push("/home");
-          window.location.reload();
+          let redirectPath = sessionStorage.getItem('redirectPath');
+          props.history.push(redirectPath || '/home');
+          sessionStorage.removeItem('redirectPath');
+          //window.location.reload();
         },
         (error) => {
           const resMessage =

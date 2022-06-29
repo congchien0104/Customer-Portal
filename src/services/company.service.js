@@ -9,7 +9,15 @@ const create = (data) => {
   });
 };
 
+const getCompanyDetails = (id) => {
+  return axios.get(API_URL + `companies/details/${id}`, {
+    headers: authHeader(),
+  });
+};
+
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   create,
+  getCompanyDetails
 };

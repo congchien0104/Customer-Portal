@@ -43,8 +43,8 @@ function UpdateUser(props) {
   const validationSchema = Yup.object().shape({
     firstname: Yup.string()
         .required('First Name is required'),
-    fullname: Yup.string()
-        .required('Full name is required'),
+    lastname: Yup.string()
+        .required('Last name is required'),
     phone: Yup.string()
         .required('Phone is required'),
     address: Yup.string()
@@ -75,22 +75,22 @@ function onSubmit(data) {
             <div className="col-md-6">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div class="form-group">
-                  <label htmlFor="company-name">First Name</label>
+                  <label htmlFor="company-name">Tên</label>
                   <input id="company-name" type="text" {...register('firstname')} className={`form-control ${errors.firstname ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.firstname?.message}</div>
                 </div>
                 <div class="form-group">
-                  <label htmlFor="company-name">Full Name</label>
-                  <input id="company-name" type="text" {...register('fullname')} className={`form-control ${errors.fullname ? 'is-invalid' : ''}`} />
-                  <div className="invalid-feedback">{errors.fullname?.message}</div>
+                  <label htmlFor="company-name">Họ</label>
+                  <input id="company-name" type="text" {...register('lastname')} className={`form-control ${errors.lastname ? 'is-invalid' : ''}`} />
+                  <div className="invalid-feedback">{errors.lastname?.message}</div>
                 </div>
                 <div class="form-group">
-                  <label htmlFor="company-name">Phone</label>
+                  <label htmlFor="company-name">Số điện thoại</label>
                   <input id="company-name" type="text" {...register('phone')} className={`form-control ${errors.phone ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.phone?.message}</div>
                 </div>
                 <div class="form-group">
-                  <label htmlFor="company-name">Address</label>
+                  <label htmlFor="company-name">Địa chỉ</label>
                   <input id="company-name" type="text" {...register('address')} className={`form-control ${errors.address ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.address?.message}</div>
                 </div>

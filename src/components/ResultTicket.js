@@ -107,6 +107,7 @@ function ResultTicket() {
       history.push(`/ticketbooking/${id}?date=${date}`);
     } else {
       SuccessNotify("Vui lòng đăng nhập để đặt vé");
+      sessionStorage.setItem('redirectPath', window.location.pathname + window.location.search);
       history.push('/login');
     }
   }

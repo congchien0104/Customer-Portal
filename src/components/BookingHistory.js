@@ -50,6 +50,7 @@ function BookingHistory(props) {
           
           getHistory(id);
           SuccessNotify("Huy ve thanh cong.");
+          window.location.reload();
         })
         .catch((e) => {
           console.log(e);
@@ -63,7 +64,7 @@ function BookingHistory(props) {
     return (
         <section className="car-line">
       <div className="container">
-        <h1 className="heading-title bg-warning text-dark">Danh sách Lịch Sử Đặt Vé: </h1>
+        <h1 className="heading-title text-success">Danh sách vé đã đặt: </h1>
         <div class="tickets-list row" style={{ "height": "44rem", "overflow": "hidden", "overflowY": "scroll" }}>
         {
             (result || []).map((item, index) => (
@@ -73,16 +74,46 @@ function BookingHistory(props) {
                     <figure style={{ "width": "20rem", "height": "10rem", "overflow": "hidden", "marginLeft": "auto", "marginRight": "auto" }}>
                       <img src={item.cars.image} style={{ "width": "100%", "height": "100%", "objectFit": "cover" }} alt="..." />
                     </figure>
-                    <p className="card-title fs-4 text-center fw-bolder mb-2">Nhà xe {item?.cars?.name}</p>
+                    <p className="card-title fs-4 text-center fw-bolder mb-2">Nhà xe {item?.company?.name}</p>
                     <p className="card-text mb-2">Tuyến: {item?.cars?.lines[0].station} - {item?.cars?.lines[0].station_to}</p>
                     <p className="card-text mb-2">Ngày đi: {formatDate(item.reservation_date, 1)}</p>
                     <p className="card-text mb-2">Người đặt vé: {item.fullname || "Công Chiến"}</p>
                     <p className="card-text mb-2">Mã vé: {item?.receipt_number}</p>
                     <p className="card-text mb-2">Số điện thoại: {item.phone}</p>
-                    <p className="card-text mb-2">Trạng thái: {item.status || 'Hoạt động'}</p>
+                    <p className="card-text mb-2 text-success">Trạng thái: {item.status || 'Hoạt động'}</p>
                     <p className="card-text mb-2">Tổng Tiền: {moneyFormatter(item.amount)}</p>
                     <div>
                       <button className="btn btn-danger" onClick={ () => handleCancel(item.id)}>Hủy</button>
+                    </div>
+                    <div>
+                      <Button onClick={handleOpen}>Xem chi tiết</Button>
+                      <Modal
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box sx={style}>
+                          <Typography id="modal-modal-title" variant="h6" component="h2">
+                          Xe: {item.cars.name}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Tuyến: {item?.cars?.lines[0].station} - {item?.cars?.lines[0].station_to}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Ngày đi: {formatDate(item.reservation_date, 1)}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Thời gian: {item?.cars?.lines[0].departure_time} - {item?.cars?.lines[0].arrival_time}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Biển số: { item.cars.plate_number}
+                          </Typography>
+                          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Mã vé: { item?.receipt_number}
+                          </Typography>
+                        </Box>
+                      </Modal>
                     </div>
                   </div>
                   <div className="card-footer">
@@ -100,7 +131,7 @@ function BookingHistory(props) {
                     <figure style={{ "width": "20rem", "height": "10rem", "overflow": "hidden", "marginLeft": "auto", "marginRight": "auto" }}>
                       <img src={item.cars.image} style={{ "width": "100%", "height": "100%", "objectFit": "cover" }} alt="..." />
                     </figure>
-                    <p className="card-title fs-4 text-center fw-bolder mb-2">Nhà xe {item.cars.name}</p>
+                    <p className="card-title fs-4 text-center fw-bolder mb-2">Nhà xe {item?.company?.name}</p>
                     <p className="card-text mb-2">Tuyến: {item?.cars?.lines[0].station} - {item?.cars?.lines[0].station_to}</p>
                     <p className="card-text mb-2">Ngày đi: {formatDate(item.reservation_date, 1)}</p>
                     <p className="card-text mb-2">Người đặt vé: {item.fullname}</p>

@@ -47,7 +47,9 @@ export default function SignIn(props) {
     try {
       await authService.login(username, password).then((res) => {
         SuccessNotify("Đăng Nhập Thành Công");
-        props.history.push("/home");
+        let redirectPath = sessionStorage.getItem('redirectPath');
+        props.history.push(redirectPath || '/home');
+        sessionStorage.removeItem('redirectPath');
         window.location.reload();
       },(error) => {
         const resMessage =

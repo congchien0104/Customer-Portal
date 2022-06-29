@@ -34,6 +34,7 @@ import SignUp from "./components/SignUp/SignUp";
 import Router from "./router";
 import Booking from "./components/Booking/Booking";
 import InfoUser from "./components/InforUser";
+import CompanyInformation from "./components/Company/CompanyInformation";
 
 function App() {
   return (
@@ -65,6 +66,9 @@ function App() {
         <Route exact path="/payment-denied" component={DenyPayment} />
         <Route exact path="/resultticket" component={ResultTicket} />
         <Route exact path="/ticketbooking/:id" component={Booking} />
+
+        <Route exact path="/company/details/:id" component={CompanyInformation} />
+        
         {/* <Route exact path="/ticketbooking/:id" component={TicketBooking} /> */}
         <Route path="/forgot" component={ForgetPassword} />
         <Route path="/reset/:confirmationCode" component={NewPassword} />

@@ -237,22 +237,6 @@ export default function Booking() {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <CssBaseline />
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Company name
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
       <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
         <div class="card mb-3 mt-3">
           <div class="row g-0">
@@ -274,7 +258,7 @@ export default function Booking() {
                 <p class="card-text text-muted">{car?.type}</p>
                 <p class="card-text hour">Bắt đầu: {car?.lines[0].departure_time} Bến xe {car?.lines[0].station}</p>
                 <p class="card-text hour">Kết thúc: {car?.lines[0].arrival_time} Bến xe {car?.lines[0].station_to}</p>
-                <p class="card-text place">Ngày đặt: {date}</p>
+                <p class="card-text place">Ngày đặt: {formatDate(date)}</p>
               </div>
             </div>
           </div>
@@ -339,4 +323,16 @@ const moneyFormatter = (money) => {
       currency: 'VND',
   }).format(money);
   return result;
+};
+
+const formatDate = (date) => {
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [day, month, year].join("-");
 };

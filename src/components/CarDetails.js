@@ -8,6 +8,7 @@ import { SuccessNotify } from "../utils/Notify";
 
 function CarDetails(props) {
   let history = useHistory();
+  const [company, setCompany] = useState({});
   const [car, setCar] = useState({});
   const [feedbacks, setFeedbacks] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -20,6 +21,7 @@ function CarDetails(props) {
       .then((response) => {
         setCar(response.data.data.car);
         setLines(response.data.data.car.lines);
+        setCompany(response.data.data.company);
         console.log(car);
       })
       .catch((e) => {
@@ -78,7 +80,7 @@ function CarDetails(props) {
   return (
     <div className="car-details">
       <div className="container">
-        <h1 className="heading-title">Nhà xe {car.name}</h1>
+        <h1 className="heading-title">Nhà xe {company?.name}</h1>
         <div className="car-desc mb-4">
           <div className="row">
             <div className="col-md-6">
@@ -90,9 +92,12 @@ function CarDetails(props) {
                 <div className="card-body">
                   <div className="row justify-content-between">
                     <div className="col-auto">
-                      <h2 className="card-title">Nhà xe {car.name}</h2>
-                      <p className="card-title">{car.station}</p><br/>
-                      <p className="card-title">{car.price} VND</p><br/>
+                      <h2 className="card-title">Xe {car?.name}</h2>
+                      <p className="card-title">Loại Xe {car?.type}</p><br/>
+                      <p className="card-title">Số Chỗ {car?.capacity}</p><br/>
+                      <Link to={`/company/details/${company?.id}`} className="btn btn-primary mr-2">
+                        Thông tin nhà xe
+                      </Link>
                       <ReactStars
                         count={5}
                         value={4}
@@ -101,22 +106,72 @@ function CarDetails(props) {
                         activeColor="#fb6e2e"
                       />
                     </div>
-                    <div className="col-auto">
-                      {/* <Link to={`/booking/${car.id}`} className="btn btn-primary">
-                        Đặt ngay
-                      </Link> */}
-                      <Link to={`ticketbooking/${car.id}`} className="btn btn-warning">
-                        Chọn Tuyến
-                      </Link>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-md-6">
-              <h2>Thông tin chi tiết về nhà xe</h2>
+              <h2>Thông tin chi tiết về xe</h2>
+              <ul className="info-car-list p-0">
+                    <li className="info-car-item d-flex">
+                      <p className="info-title">Hành Trình:</p>
+                      <div className="info-content">{lines[0]?.start}  -  {lines[0]?.destination}</div>
+                    </li>
+                    <li className="info-car-item d-flex">
+                      <p className="info-title">Thời gian:</p>
+                      <div className="info-content">{lines[0]?.departure_time}  -  {lines[0]?.arrival_time}</div>
+                    </li>
+                    <li className="info-car-item d-flex">
+                      <p className="info-title">Các Thứ Trong Tuần:</p>
+                      <div className="info-content">{lines[0]?.weekdays}</div>
+                    </li>
+                    <li className="info-car-item d-flex">
+                      <p className="info-title">Giá:</p>
+                      <div className="info-content">{moneyFormatter(lines[0]?.price)}</div>
+                    </li>
+                    <li className="info-car-item d-flex">
+                      <p className="info-title">Bến đi:</p>
+                      <div className="info-content">{lines[0]?.station}</div>
+                    </li>
+                    <li className="info-car-item d-flex">
+                      <p className="info-title">Bến Đến:</p>
+                      <div className="info-content">{lines[0]?.station_to}</div>
+                    </li>
+                    <li className="info-car-item d-flex">
+                      <button className="btn btn-success" onClick={()=> history.push(`/ticketbooking/${car.id}?date=2021-12-28`)}>
+                        Đặt Ngay
+                      </button>
+                    </li>
+                  </ul>
+
+          <div className="journey-list">
+            <h3>Danh sách điểm đón</h3>
+              <ul className="list-group">
+              {(lines[0]?.journeys || []).filter(item => !item.status).map((item, index) => (
+                
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <div className="d-flex align-items-center">
+                        <span className="badge bg-primary rounded-pill d-block">{index + 1}</span>
+                        <span style={{"marginLeft": "1rem"}} className="d-block ml-2">{item?.time_hour} - {item?.address}</span>
+                    </div>
+                </li>
+              ))}
+            </ul>
+            <h3>Danh sách điểm trả</h3>
+            <ul className="list-group">
+            {(lines[0]?.journeys || []).filter(item => item.status).map((item, index) => (
               
-              {
+              <li className="list-group-item d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center">
+                      <span className="badge bg-primary rounded-pill d-block">{index + 1}</span>
+                      <span style={{"marginLeft": "1rem"}} className="d-block ml-2">{item?.time_hour} - {item?.address}</span>
+                  </div>
+              </li>
+            ))}
+            </ul>
+          </div>
+              
+              {/* {
                 lines && lines.map((item, index) => (
                   <ul className="info-car-list p-0">
                     <li className="info-car-item d-flex">
@@ -138,28 +193,7 @@ function CarDetails(props) {
                     </li>
                   </ul>
                 ))
-              }
-              <p>Số Ghế: {car.capacity}</p><br/>
-              <p>Giá Vé: {car.price}</p><br/>
-              <p>Biển Số: {car.plate_number}</p><br/>
-              <p>Bến Xe: {car.station}</p><br/>
-                {/* <li className="info-car-item d-flex">
-                  <p className="info-title">Tuyến:</p>
-                  <div className="info-content">{car.start} - {car.end}</div>
-                </li>
-                <li className="info-car-item d-flex">
-                  <p className="info-title">Số lượng ghế:</p>
-                  <div className="info-content">{car.capacity} ghế</div>
-                </li>
-                <li className="info-car-item d-flex">
-                  <p className="info-title">Khởi hành:</p>
-                  <div className="info-content">{car.time_start}</div>
-                </li>
-                <li className="info-car-item d-flex">
-                  <p className="info-title">Kết thúc:</p>
-                  <div className="info-content">{car.time_end}</div>
-                </li> */}
-             
+              } */}
             </div>
           </div>
         </div>
@@ -239,6 +273,15 @@ const formatDate = (date) => {
   if (day.length < 2) day = "0" + day;
 
   return [year, month, day].join("-");
+};
+
+const moneyFormatter = (money) => {
+  if (!money) money = 0;
+  const result = new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+  }).format(money);
+  return result;
 };
 
 export default CarDetails;

@@ -60,21 +60,21 @@ function ChangePassword() {
             <div className="col-md-6">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div class="form-group">
-                  <label htmlfor="oldPassword">Old Password</label>
+                  <label htmlfor="oldPassword">Mật khẩu cũ</label>
                   <input name="oldPassword" type="password" {...register('oldPassword')} className={`form-control ${errors.oldPassword ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.oldPassword?.message}</div>
                 </div>
                 <div class="form-group">
-                  <label htmlfor="newPassword">New Password</label>
+                  <label htmlfor="newPassword">Mật khẩu mới</label>
                   <input name="newPassword" type="password" {...register('newPassword')} className={`form-control ${errors.newPassword ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.newPassword?.message}</div>
                 </div>
                 <div class="form-group">
-                  <label htmlfor="confirmPassword">Confirm Password</label>
+                  <label htmlfor="confirmPassword">Nhập lại mật khẩu mới</label>
                   <input name="confirmPassword" type="password" {...register('confirmPassword')} className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.confirmPassword?.message}</div>
                 </div>
-                <button type="submit" className="btn btn-primary"><i class="fas fa-paper-plane"></i> Gửi</button>
+                <button type="submit" className="btn btn-primary"><i class="fas fa-paper-plane"></i>Đổi mật khẩu</button>
               </form>
             </div>
           </div>
